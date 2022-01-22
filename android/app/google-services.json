@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "403232190641",
+    "project_id": "instaglone",
+    "storage_bucket": "instaglone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403232190641:android:315f67a367869500923290",
+        "android_client_info": {
+          "package_name": "com.example.instaglone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "403232190641-3pn6930i6dnv9mjqkbbs4k5r4hn8qnvs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQdqmAoMcZm0Tvk7-G-LsNgI0_sBIFGR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "403232190641-3pn6930i6dnv9mjqkbbs4k5r4hn8qnvs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
