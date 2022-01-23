@@ -51,10 +51,7 @@ class MyHomePage extends StatelessWidget {
         child: Text(
           "Hello user",
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [],
-      ),
+      )
     );
   }
 }
