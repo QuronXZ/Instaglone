@@ -32,7 +32,11 @@ class _CreatePostState extends State<CreatePost> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create Post"),
+        title: Text("Create Post",
+            style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w500,
+                fontFamily: "Billabong")),
       ),
       body: Column(
         children: [

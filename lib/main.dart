@@ -25,15 +25,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Feed',
       theme: ThemeData(primarySwatch: generateMaterialColor(Colors.white)),
-      home: CreatePost(),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  String text;
-  MyHomePage(this.text);
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -48,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static const List<Widget> _Pages = <Widget>[
     Text('Index 0: Home Page'),
     Text('Index 1: Search Page'),
-    Text('Index 3: Upload Page'),
+    CreatePost(),
     Text('Index 4: Profile Page'),
   ];
 
