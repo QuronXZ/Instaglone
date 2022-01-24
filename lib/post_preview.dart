@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'dart:typed_data';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'dart:io';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Material_color_generator.dart';
+import 'package:instaglone/Models/post.dart';
+import 'package:path_provider/path_provider.dart';
 
 class PhotoPreviewScreen extends StatefulWidget {
   File imageFile;
@@ -16,6 +18,7 @@ class PhotoPreviewScreen extends StatefulWidget {
 class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
   final TextEditingController controller = new TextEditingController();
 
+  //Method to render image on screen
   Widget _setImageView() {
     if (widget.imageFile != null) {
       return Image.file(widget.imageFile, width: 500, height: 500);
@@ -24,6 +27,7 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
     }
   }
 
+  // Method to handle backbutton
   Future<bool> _onBackPressed() async {
     return await showDialog(
           context: context,
@@ -31,14 +35,19 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
             title: Text('Discard changes?'),
             content: Text('There are unsaved changes.'),
             actions: <Widget>[
-              GestureDetector(
-                onTap: () => Navigator.of(context).pop(false),
-                child: Text("NO"),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).pop(false),
+                  child: Text("NO"),
+                ),
               ),
-              SizedBox(height: 16),
-              GestureDetector(
-                onTap: () => Navigator.of(context).pop(true),
-                child: Text("YES"),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).pop(true),
+                  child: Text("YES"),
+                ),
               ),
             ],
           ),
@@ -46,7 +55,28 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
         false;
   }
 
-  void _savePost() {}
+  //Method to save post
+  Future<void> _savePost() async {
+    //Getting collection reference from database
+    final moviesRef =
+        FirebaseFirestore.instance.collection('Posts').withConverter<Post>(
+              fromFirestore: (snapshot, _) => Post.fromJson(snapshot.data()!),
+              toFirestore: (post, _) => post.toJson(),
+            );
+    Uint8List temp = await FlutterImageCompress.compressWithList(
+        widget.imageFile.readAsBytesSync());
+    final tempDir = await getTemporaryDirectory();
+    final file = await new File('${tempDir.path}/image.jpg').create();
+    file.writeAsBytesSync(temp);
+    print(file.path);
+    await moviesRef.add(
+      Post(
+          pic: file,
+          caption: controller.text,
+          owner: "me",
+          createdOn: DateTime.now().toString()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
