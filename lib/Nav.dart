@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instaglone/feed.dart';
 import 'add_post.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -8,13 +9,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int pageNum = 0;
-  Icon _homeIcon = Icon(Icons.home_outlined);
+  Icon _homeIcon = Icon(Icons.home);
   Icon _searchIcon = Icon(Icons.search_outlined);
   Icon _addIcon = Icon(Icons.add_circle_outline);
   Icon _profileIcon = Icon(Icons.person_outlined);
 
   static const List<Widget> _Pages = <Widget>[
-    Text('Index 0: Home Page'),
+    Feed(),
     Text('Index 1: Search Page'),
     CreatePost(),
     Text('Index 4: Profile Page'),
@@ -25,31 +26,31 @@ class _MyHomePageState extends State<MyHomePage> {
       pageNum = index;
       switch (pageNum) {
         case 0:
-          _addIcon = Icon(Icons.add_circle_outline);
-          _profileIcon = Icon(Icons.person_outlined);
-          _searchIcon = Icon(Icons.search);
-          _homeIcon = Icon(Icons.home);
+          _addIcon = const Icon(Icons.add_circle_outline);
+          _profileIcon = const Icon(Icons.person_outlined);
+          _searchIcon = const Icon(Icons.search);
+          _homeIcon = const Icon(Icons.home);
           break;
         case 1:
-          _homeIcon = Icon(Icons.home_outlined);
-          _addIcon = Icon(Icons.add_circle_outline);
-          _profileIcon = Icon(Icons.person_outlined);
-          _searchIcon = Icon(
+          _homeIcon = const Icon(Icons.home_outlined);
+          _addIcon = const Icon(Icons.add_circle_outline);
+          _profileIcon = const Icon(Icons.person_outlined);
+          _searchIcon = const Icon(
             Icons.search,
-            size: 28,
+            size: 34,
           );
           break;
         case 2:
-          _homeIcon = Icon(Icons.home_outlined);
-          _profileIcon = Icon(Icons.person_outlined);
-          _searchIcon = Icon(Icons.search);
-          _addIcon = Icon(Icons.add_circle);
+          _homeIcon = const Icon(Icons.home_outlined);
+          _profileIcon = const Icon(Icons.person_outlined);
+          _searchIcon = const Icon(Icons.search);
+          _addIcon = const Icon(Icons.add_circle);
           break;
         case 3:
-          _homeIcon = Icon(Icons.home_outlined);
-          _addIcon = Icon(Icons.add_circle_outline);
-          _searchIcon = Icon(Icons.search);
-          _profileIcon = Icon(Icons.person);
+          _homeIcon = const Icon(Icons.home_outlined);
+          _addIcon = const Icon(Icons.add_circle_outline);
+          _searchIcon = const Icon(Icons.search);
+          _profileIcon = const Icon(Icons.person);
           break;
       }
     });
@@ -59,20 +60,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          "Instaglone",
-          style: TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.w500,
-              fontFamily: "Billabong"),
-        ),
-        elevation: 0,
-      ),
       body: Center(
         child: _Pages.elementAt(pageNum),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        iconSize: 30,
         elevation: 0,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
