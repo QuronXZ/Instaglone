@@ -17,7 +17,7 @@ class Post {
   Post.fromJson(Map<String, Object?> json)
       : this(
             pic: File(base64Decode(json['pic'].toString()).toString()),
-            caption: json['catpion'].toString(),
+            caption: json['caption'].toString(),
             owner: json['owner'].toString(),
             createdOn: json['createdOn'].toString());
 
