@@ -31,15 +31,17 @@ class _CreatePostState extends State<CreatePost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Create Post",
             style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w500,
                 fontFamily: "Billabong")),
+        elevation: 0,
       ),
       body: Column(
-        children: [
+        children: <Widget>[
           Expanded(
             child: InkWell(
               child: Container(
