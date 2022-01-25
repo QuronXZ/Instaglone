@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'post_preview.dart';
 
@@ -13,18 +14,30 @@ class CreatePost extends StatefulWidget {
 
 class _CreatePostState extends State<CreatePost> {
   void _openCamera(BuildContext context) async {
-    XFile? picture = await ImagePicker().pickImage(source: ImageSource.camera);
-    if (picture != null) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PhotoPreviewScreen(File(picture.path))));
+    try {
+      XFile? picture =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (picture != null) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => PhotoPreviewScreen(File(picture.path))));
+      }
+    } catch (src, trace) {
+      Fluttertoast.showToast(
+          msg: "Image picker already running", toastLength: Toast.LENGTH_LONG);
     }
   }
 
   void _openGallery(BuildContext context) async {
-    XFile? picture = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (picture != null) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PhotoPreviewScreen(File(picture.path))));
+    try {
+      XFile? picture =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (picture != null) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => PhotoPreviewScreen(File(picture.path))));
+      }
+    } catch (src, trace) {
+      Fluttertoast.showToast(
+          msg: "Image picker already running", toastLength: Toast.LENGTH_LONG);
     }
   }
 
@@ -51,7 +64,10 @@ class _CreatePostState extends State<CreatePost> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Icon(Icons.camera_alt_outlined),
+                    Icon(
+                      Icons.camera_alt_outlined,
+                      size: 75,
+                    ),
                     Text("Take a photo")
                   ],
                 ),
@@ -68,7 +84,10 @@ class _CreatePostState extends State<CreatePost> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Icon(Icons.image),
+                    Icon(
+                      Icons.image,
+                      size: 75,
+                    ),
                     Text("Select from Gallery")
                   ],
                 ),

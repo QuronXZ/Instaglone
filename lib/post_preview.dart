@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Material_color_generator.dart';
 import 'package:instaglone/Models/post.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PhotoPreviewScreen extends StatefulWidget {
   File imageFile;
@@ -63,19 +64,31 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
               fromFirestore: (snapshot, _) => Post.fromJson(snapshot.data()!),
               toFirestore: (post, _) => post.toJson(),
             );
+    //Compressing the image
     Uint8List temp = await FlutterImageCompress.compressWithList(
         widget.imageFile.readAsBytesSync());
+    //Creating a temporary image
     final tempDir = await getTemporaryDirectory();
     final file = await new File('${tempDir.path}/image.jpg').create();
     file.writeAsBytesSync(temp);
-    print(file.path);
-    await moviesRef.add(
-      Post(
-          pic: file,
-          caption: controller.text,
-          owner: "me",
-          createdOn: DateTime.now().toString()),
-    );
+    //Adding image to database
+    try {
+      await moviesRef.add(
+        Post(
+            pic: file,
+            caption: controller.text,
+            owner: "me",
+            createdOn: DateTime.now().toString()),
+      );
+      //On post creation
+      Navigator.pop(context);
+      Fluttertoast.showToast(
+          msg: "Post created!!", toastLength: Toast.LENGTH_SHORT);
+    } catch (src, trace) {
+      Fluttertoast.showToast(
+          msg: "Image size greater than 1mb!\nUse image file less than 1mb",
+          toastLength: Toast.LENGTH_LONG);
+    }
   }
 
   @override
@@ -94,10 +107,13 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
                 TextField(
                   controller: this.controller,
                   decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.text_snippet_outlined),
-                      labelText: "Caption",
-                      hintText: "\n\n\n\n\n",
-                      focusColor: generateMaterialColor(Colors.black)),
+                    prefixIcon: Icon(Icons.text_snippet_outlined),
+                    labelText: "Caption",
+                    hintText: "\n\n\n\n\n",
+                    prefixIconColor: Colors.black,
+                    focusColor: Colors.black,
+                    iconColor: Colors.black,
+                  ),
                 ),
               ],
             ),
