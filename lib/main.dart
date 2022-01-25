@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'package:flutter/material.dart';
 import "Material_color_generator.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'Nav.dart';
 import 'login.dart';
