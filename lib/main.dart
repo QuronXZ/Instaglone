@@ -32,13 +32,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     signout();
-    // user = FirebaseAuth.instance.authStateChanges().listen((user) {
-    //   if (user == null) {
-    //     print('User is currently signed out!');
-    //   } else {
-    //     print('User is signed in!');
-    //   }
-    // });
   }
 
   Future<void> signout() async {

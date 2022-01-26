@@ -32,8 +32,8 @@ class _MyRegisterState extends State<MyRegister> {
         File image = await getImageFileFromAssets("profile.png");
         String img = base64Encode(image.readAsBytesSync());
         usersRef
-            .add({
-              "UID": user.uid,
+            .doc(user.uid)
+            .set({
               "name": "",
               "dob": "",
               "followers": [],
@@ -61,6 +61,14 @@ class _MyRegisterState extends State<MyRegister> {
         .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
 
     return file;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    email.dispose();
+    password.dispose();
+    username.dispose();
   }
 
   @override
