@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instaglone/feed.dart';
+import 'package:instaglone/main.dart';
+import 'package:instaglone/profilepage.dart';
 import 'add_post.dart';
 import 'searchlist.dart';
 
@@ -19,7 +21,9 @@ class _MyHomePageState extends State<MyHomePage> {
     Feed(),
     ListPage(),
     CreatePost(),
-    Text('Index 4: Profile Page'),
+    ProfileScreen(
+      uid: FirebaseFirestore.instance.currentUser!.uid,
+    ),
   ];
 
   void _onPageSelected(int index) {
@@ -86,4 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+}
+
+mixin FirebaseAuth {
+  static var instance;
 }

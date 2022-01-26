@@ -1,6 +1,10 @@
+import 'dart:js';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:instaglone/Nav.dart';
 import 'widgets/follow_button.dart';
+import 'Models/showSnackbar.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -13,6 +17,11 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
 
   var userData ={};
+  int postLen = 0;
+  int followers = 0;
+  int following = 0;
+  bool isFollowing = false;
+  bool isLoading = true;
 
   @override
   void initState(){
@@ -21,21 +30,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   getData() async{
+    setState(() {
+      isLoading=true;
+    });
+
+
+  Future<void> followUser(
+    String uid,
+    String followId
+  ) async {
     try{
-      var snap = await FirebaseFirestore.instance.collection('users').doc(widget.uid).get();
-      userData = snap.data()!;
-      setState(() {
-        
+      DocumentSnapshot snap = await _firestore.collection('users').doc(uid).get();
+      List following = (snap.data()! as dynamic) ['following'];
+
+      if (following.contains(followId)){
+        await _firestore.collection('users').doc(followId).update({
+          'followers': FieldValue.arrayRemove([uid])
+        });
+
+        await _firestore.collection('users').doc(followId).update({
+          'followers': FieldValue.arrayRemove([followId])
+        });
+      } else {
+        await _firestore.collection('users').doc(followId).update({
+          'followers': FieldValue.arrayUnion([uid])
+        });
+
+        await _firestore.collection('users').doc(followId).update({
+          'followers': FieldValue.arrayUnion([followId])
+        });
+      }
+    
+    } catch(e) {
+      print(e.toString());
+    }
+  }
+  
+    
+
+
+    try{
+      var userSnap = await FirebaseFirestore.instance.collection('users').doc(widget.uid).get();
+      
+      //get post LENGTH
+      var postSnap = await FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid).get();
+      postLen = postSnap.docs.length;
+      userData = userSnap.data()!;
+      followers=userSnap.data()!['followers'].length;
+      following = userSnap.data()!['following'].length;
+      isFollowing = userSnap.data()!['followers'].contains(FirebaseAuth.instance.currentUser!.uid);
+      setState(() {       
       });
       
     }
     catch(e){
       showSnackBar(context, e.toString(),);
     }
+
+    setState(() {
+      isLoading=true;
+    });
   }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading? const Center(child: CircularProgressIndicator(),
+    ) 
+    : Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black26,
         title: Text(userData['username'],),
@@ -50,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   CircleAvatar(
                     backgroundColor: Colors.grey,
-                    backgroundImage: NetworkImage('https://images.unsplash.com/photo-1643056205382-779bfbe21a8b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+                    backgroundImage: NetworkImage(userData['photoUrl'],
                     ),
                     radius: 40,
                   ),
@@ -62,23 +123,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            buildStatColumn(20, "Posts"),
-                            buildStatColumn(150, "Followers"),
-                            buildStatColumn(11, "Following"),
+                            buildStatColumn(postLen, "Posts"),
+                            buildStatColumn(followers, "Followers"),
+                            buildStatColumn(following, "Following"),
                         ],
                         
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            FollowButton(
+                            FirebaseAuth.instance.currentUser!.uid == widget.uid? FollowButton(
                               text: 'Edit Profile',
                               backgroundColor: Colors.black,
                               textColor: Colors.white,
                               borderColor: Colors.grey,
                               function: () {},
+                      ): isFollowing? FollowButton(
+                              text: 'Unfollow',
+                              backgroundColor: Colors.white,
+                              textColor: Colors.black,
+                              borderColor: Colors.grey,
+                              function: () async {
+                                await FirestoreMethods().followUser(FirebaseAuth.instance.currentUser!.uid, userData['uid'],);
 
+                                setState(() {
+                                  isFollowing = false;
+                                  followers--;
+                                });
+                              },
+                      ): FollowButton(
+                              text: 'Follow',
+                              backgroundColor: Colors.blue,
+                              textColor: Colors.white,
+                              borderColor: Colors.blue,
+                              function: () async {
+                                await FirestoreMethods().followUser(FirebaseAuth.instance.currentUser!.uid, userData['uid'],);
+
+                                setState(() {
+                                  isFollowing = true;
+                                  followers++;
+                                });
+                              },
                       )
+                      
                     ],
                   ),
                       ],
@@ -92,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(top:15,),
                 child: Text(
-                  'username',
+                  userData['username'],
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -103,13 +190,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(top:1,),
                 child: Text(
-                  'some description',
+                  userData['bio'],
                 ),
               )
             ],
           ),
         ),
         const Divider(),
+        FutureBuilder(
+          future: FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: widget.uid).get(),
+          builder:(context, snapshot) {
+            if(snapshot.connectionState == ConnectionState.waiting){
+              return const Center(child: CircularProgressIndicator(),
+              );
+            }
+
+            return GridView.builder(
+              shrinkWrap: true,
+              itemCount: (snapshot.data! as dynamic).docs.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, 
+                crossAxisSpacing: 5, 
+                mainAxisSpacing: 1.5, 
+                childAspectRatio: 1
+                ), 
+              itemBuilder: (context, index) {
+                DocumentSnapshot snap = (snapshot.data! as dynamic).docs[index];
+
+                return Container(
+                  child: Image(
+                    image: NetworkImage(
+                      snap['postUrl']
+                    ),
+                    fit: BoxFit.cover,
+                    ),
+                );
+              }
+              );
+
+          },
+          )
       ],
     ),
   );
