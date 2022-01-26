@@ -68,11 +68,15 @@ class _LoginState extends State<MyLogin> {
                     TextField(
                       controller: email,
                       decoration: InputDecoration(
-                        fillColor: Colors.grey.shade100,
-                        filled: true,
-                        hintText: 'Email',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                        labelText: 'Email',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 3, color: Colors.grey.shade800),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(width: 3, color: Colors.green),
+                          borderRadius: BorderRadius.circular(15),
+                        )
                       ),
                     ),
                     SizedBox(height: 30),
@@ -80,12 +84,15 @@ class _LoginState extends State<MyLogin> {
                       obscureText: true,
                       controller: password,
                       decoration: InputDecoration(
-                        fillColor: Colors.grey.shade100,
-                        filled: true,
-                        hintText: 'password',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                      ),
+                        labelText: 'Password',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 3, color: Colors.grey.shade800),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(width: 3, color: Colors.green),
+                          borderRadius: BorderRadius.circular(15),
+                          )),
                     ),
                     SizedBox(height: 40),
                     Row(
