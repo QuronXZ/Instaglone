@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:instaglone/Models/showSnackbar.dart';
 import 'widgets/follow_button.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -22,7 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   getData() async{
     try{
-      var snap = await FirebaseFirestore.instance.collection('users').doc(widget.uid).get();
+      var snap = await FirebaseFirestore.instance.collection('Users').doc(widget.uid).get();
       userData = snap.data()!;
       setState(() {
         
@@ -30,7 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       
     }
     catch(e){
-      showSnackBar(context, e.toString(),);
+      ShowSnack(context, e.toString(),);
     }
   }
   @override
@@ -98,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
 
-              )
+              ),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(top:1,),
