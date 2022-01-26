@@ -35,7 +35,7 @@ class _ChangePassState extends State<ChangePass> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.black26,
-          content: Text('Your Password has been CHanged.. Login AGAIN!'),
+          content: Text('Your Password has been changed.. Login AGAIN!'),
         ),
       );
     } catch (error) {}

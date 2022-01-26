@@ -1,44 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instaglone/Models/user.dart';
 
-class ListPage extends StatefulWidget {
-  const ListPage({Key? key}) : super(key: key);
-
+class listPeople extends StatefulWidget {
+  //const listPeople({Key? key}) : super(key: key);
+  final List<User> listItems = [];
   @override
-  _ListPageState createState() => _ListPageState();
+  _listPeopleState createState() => _listPeopleState();
 }
 
-class _ListPageState extends State<ListPage> {
-  final TextEditingController searchController = TextEditingController();
+class _listPeopleState extends State<listPeople> {
   bool isShowUsers = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          elevation: null,
-          title: Form(
-            child: TextFormField(
-              controller: searchController,
-              decoration:
-                  const InputDecoration(labelText: 'Search for a user...'),
-              onFieldSubmitted: (String _) {
-                setState(() {
-                  isShowUsers = true;
-                });
-                print(_);
-              },
-            ),
-          ),
+          title: Text("Followers"),
         ),
         body: isShowUsers
             ? FutureBuilder(
                 future: FirebaseFirestore.instance
                     .collection('Users')
-                    .where(
-                      'username',
-                      isGreaterThanOrEqualTo: searchController.text,
-                    )
+                    .where('followers', arrayContains: true)
                     .get(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
@@ -67,6 +51,6 @@ class _ListPageState extends State<ListPage> {
                   );
                 },
               )
-            : Text(''));
+            : Text("No followers :("));
   }
 }

@@ -31,7 +31,7 @@ class _FeedState extends State<Feed> {
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
