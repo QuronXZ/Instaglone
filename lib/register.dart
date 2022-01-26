@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,10 @@ class _MyRegisterState extends State<MyRegister> {
         final usersRef = FirebaseFirestore.instance.collection('Users');
         File image = await getImageFileFromAssets("profile.png");
         String img = base64Encode(image.readAsBytesSync());
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child("profile.png")
+            .getDownloadURL();
         usersRef
             .doc(user.uid)
             .set({
@@ -40,7 +45,7 @@ class _MyRegisterState extends State<MyRegister> {
               "following": [],
               "username": username.text.trim(),
               "bio": "",
-              "profile": img
+              "profile": ref.toString()
             })
             .then((value) => ShowSnack(context, "Sign-Up Successful!!"))
             .then((value) => Navigator.pop(context))
