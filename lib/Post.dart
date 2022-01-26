@@ -89,7 +89,7 @@ class _PostState extends State<Post> {
           Container(
             height: MediaQuery.of(context).size.width,
             width: MediaQuery.of(context).size.width,
-            child: Image.memory(base64Decode(snap["pic"])),
+            child: Image.network(snap['pic']),
             color: Colors.black,
           ),
           Row(
