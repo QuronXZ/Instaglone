@@ -67,6 +67,6 @@ class _ListPageState extends State<ListPage> {
                   );
                 },
               )
-            : Text('Posts'));
+            : Text(''));
   }
 }
