@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,10 @@ class _MyRegisterState extends State<MyRegister> {
         final usersRef = FirebaseFirestore.instance.collection('Users');
         File image = await getImageFileFromAssets("profile.png");
         String img = base64Encode(image.readAsBytesSync());
+        final ref = await FirebaseStorage.instance
+            .ref()
+            .child("profile.png")
+            .getDownloadURL();
         usersRef
             .doc(user.uid)
             .set({
@@ -40,7 +45,7 @@ class _MyRegisterState extends State<MyRegister> {
               "following": [],
               "username": username.text.trim(),
               "bio": "",
-              "profile": img
+              "profile": ref.toString()
             })
             .then((value) => ShowSnack(context, "Sign-Up Successful!!"))
             .then((value) => Navigator.pop(context))
@@ -108,23 +113,15 @@ class _MyRegisterState extends State<MyRegister> {
                             style: TextStyle(color: Colors.white),
                             controller: username,
                             decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                hintText: "User Name",
-                                hintStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                )),
+                        labelText: 'Username',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 3, color: Colors.grey.shade800),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(width: 3, color: Colors.green),
+                          borderRadius: BorderRadius.circular(15),
+                          )),
                           ),
                           SizedBox(
                             height: 30,
@@ -133,23 +130,15 @@ class _MyRegisterState extends State<MyRegister> {
                             style: TextStyle(color: Colors.white),
                             controller: email,
                             decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                hintText: "Email",
-                                hintStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                )),
+                        labelText: 'Email',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 3, color: Colors.grey.shade800),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(width: 3, color: Colors.green),
+                          borderRadius: BorderRadius.circular(15),
+                          )),
                           ),
                           SizedBox(
                             height: 30,
@@ -159,23 +148,15 @@ class _MyRegisterState extends State<MyRegister> {
                             obscureText: true,
                             controller: password,
                             decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                hintText: "Password",
-                                hintStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                )),
+                              labelText: 'Password',
+                              enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 3, color: Colors.grey.shade800),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(width: 3, color: Colors.green),
+                              borderRadius: BorderRadius.circular(15),
+                            )),
                           ),
                           SizedBox(
                             height: 40,
