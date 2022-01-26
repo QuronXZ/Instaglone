@@ -99,9 +99,10 @@ class _PostState extends State<Post> {
                 icon: fav_icon,
               ),
               InkWell(
+                //onTap: Navigator.push(context, route),
                 onLongPress: () => {},
                 child: Text(
-                  snap["likedBy"].length.toString() + " likes",
+                  snap["likedBy"].length.toString() + " likes",                 
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
               ),

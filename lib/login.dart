@@ -92,7 +92,7 @@ class _LoginState extends State<MyLogin> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'sign in',
+                          'Sign In',
                           style: TextStyle(
                               color: Color(0xff4c505b),
                               fontSize: 27,

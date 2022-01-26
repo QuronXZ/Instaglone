@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firestore_search/firestore_search.dart';
+import 'package:instaglone/Models/user.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({Key? key}) : super(key: key);
@@ -14,59 +16,58 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          elevation: null,
-          title: Form(
-            child: TextFormField(
-              controller: searchController,
-              decoration:
-                  const InputDecoration(labelText: 'Search for a user...'),
-              onFieldSubmitted: (String _) {
-                setState(() {
-                  isShowUsers = true;
-                });
-                print(_);
-              },
-            ),
-          ),
-        ),
-        body: isShowUsers
-            ? FutureBuilder(
-                future: FirebaseFirestore.instance
-                    .collection('Users')
-                    .where(
-                      'username',
-                      isGreaterThanOrEqualTo: searchController.text,
+    return FirestoreSearchScaffold(
+      firestoreCollectionName: 'Users',
+      searchBy: 'username',
+      scaffoldBody: Center(),
+      dataListFromSnapshot: User().dataListFromSnapshot,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<User>? dataList = snapshot.data;
+          if (dataList!.isEmpty) {
+            return const Center(
+              child: Text('No Results Returned'),
+            );
+          }
+          return ListView.builder(
+              itemCount: dataList.length,
+              itemBuilder: (context, index) {
+                final User data = dataList[index];
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        '${data.name}',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 8.0, left: 8.0, right: 8.0),
+                      child: Text('${data.username}',
+                          style: Theme.of(context).textTheme.bodyText1),
                     )
-                    .get(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return ListView.builder(
-                    itemCount: (snapshot.data! as dynamic).docs.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        child: ListTile(
-                          // leading: CircleAvatar(
-                          //   backgroundImage: NetworkImage(
-                          //     (snapshot.data! as dynamic).docs[index]
-                          //         ['photoUrl'],
-                          //   ),
-                          //   radius: 16,
-                          // ),
-                          title: Text(
-                            (snapshot.data! as dynamic).docs[index]['username'],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              )
-            : Text(''));
+                  ],
+                );
+              });
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: Text('No Results Returned'),
+            );
+          }
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }

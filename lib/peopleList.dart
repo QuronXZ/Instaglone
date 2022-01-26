@@ -1,16 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instaglone/Models/user.dart';
 
 class listPeople extends StatefulWidget {
-  //const listPeople({Key? key}) : super(key: key);
-  final List<User> listItems = [];
+   final String uid;
+  const listPeople({Key? key, required this.uid}) : super(key: key);
   @override
   _listPeopleState createState() => _listPeopleState();
 }
 
 class _listPeopleState extends State<listPeople> {
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('Users').snapshots();
+  final usersRef = FirebaseFirestore.instance.collection('Users').snapshots();
   bool isShowUsers = false;
   @override
   Widget build(BuildContext context) {
@@ -19,19 +22,20 @@ class _listPeopleState extends State<listPeople> {
           title: Text("Followers"),
         ),
         body: isShowUsers
-            ? FutureBuilder(
-                future: FirebaseFirestore.instance
-                    .collection('Users')
-                    .where('followers', arrayContains: true)
-                    .get(),
+            ? StreamBuilder<QuerySnapshot>(
+                stream: _usersStream,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                        child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    ));
                   }
                   return ListView.builder(
-                    itemCount: (snapshot.data! as dynamic).docs.length,
+                    itemCount: (snapshot.data! as dynamic)
+                        .docs
+                        .uid['followers']
+                        .length,
                     itemBuilder: (context, index) {
                       return InkWell(
                         child: ListTile(
@@ -43,7 +47,8 @@ class _listPeopleState extends State<listPeople> {
                           //   radius: 16,
                           // ),
                           title: Text(
-                            (snapshot.data! as dynamic).docs[index]['username'],
+                            (snapshot.data! as dynamic).docs.uid['followers']
+                                [index],
                           ),
                         ),
                       );
@@ -51,6 +56,11 @@ class _listPeopleState extends State<listPeople> {
                   );
                 },
               )
-            : Text("No followers :("));
+            : Center(
+                child: Text(
+                  'No followers :(',
+                  textAlign: TextAlign.center,
+                ),
+              ));
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:instaglone/peopleList.dart';
 import "Material_color_generator.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,6 +50,7 @@ class _MyAppState extends State<MyApp> {
         "home": (context) => MyHomePage(),
         "login": (context) => MyLogin(),
         "register": (context) => MyRegister(),
+        "people":(context)=>listPeople()
       },
       initialRoute:
           FirebaseAuth.instance.currentUser == null ? "login" : "home",
