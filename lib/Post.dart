@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Post extends StatefulWidget {
@@ -23,7 +24,25 @@ class _PostState extends State<Post> {
     Icons.favorite_border,
     size: 32,
   );
+  String current_user = "";
   bool isLiked = false;
+  String post_owner = "";
+  String post_prof = "";
+
+  void set_owner(Map<String, dynamic>? post_data) {
+    setState(() {
+      post_owner = post_data?["username"];
+      //TODO: post_prof = "";
+    });
+  }
+
+  void get_owner() {
+    FirebaseFirestore.instance
+        .collection("Users")
+        .doc(snap["owner"])
+        .get()
+        .then((value) => {set_owner(value.data())});
+  }
 
 // On like Function
   void on_like() {
@@ -35,7 +54,7 @@ class _PostState extends State<Post> {
           size: 32,
           color: Colors.red,
         );
-        snap["likedBy"].add("Current User");
+        snap["likedBy"].add(current_user);
         FirebaseFirestore.instance
             .collection('Posts')
             .where("createdOn", isEqualTo: snap["createdOn"])
@@ -50,7 +69,7 @@ class _PostState extends State<Post> {
           Icons.favorite_border,
           size: 32,
         );
-        snap["likedBy"].remove("Current User");
+        snap["likedBy"].remove(current_user);
         FirebaseFirestore.instance
             .collection('Posts')
             .where("createdOn", isEqualTo: snap["createdOn"])
@@ -61,11 +80,18 @@ class _PostState extends State<Post> {
                 .doc(value.docs.first.id)
                 .update({"likedBy": snap["likedBy"]}));
       }
+      isLiked = snap["likedBy"].contains(current_user);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      current_user = user.uid;
+      isLiked = snap["likedBy"].contains(current_user);
+    }
+    get_owner();
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
       child: Column(
@@ -79,7 +105,7 @@ class _PostState extends State<Post> {
                 ),
                 SizedBox(width: 10),
                 Text(
-                  snap["owner"],
+                  post_owner,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 )
               ],
@@ -89,17 +115,31 @@ class _PostState extends State<Post> {
           Container(
             height: MediaQuery.of(context).size.width,
             width: MediaQuery.of(context).size.width,
-            child: Image.memory(base64Decode(snap["pic"])),
+            child: Image.network(
+              snap["pic"],
+              errorBuilder: (context, exception, stackTrace) {
+                return Text("Error Loading..");
+              },
+            ),
             color: Colors.black,
           ),
           Row(
             children: [
               IconButton(
                 onPressed: () => on_like(),
-                icon: fav_icon,
+                icon: isLiked
+                    ? Icon(
+                        Icons.favorite,
+                        size: 32,
+                        color: Colors.red,
+                      )
+                    : Icon(
+                        Icons.favorite_border,
+                        size: 32,
+                      ),
               ),
               InkWell(
-                onLongPress: () => {},
+                onTap: () => {},
                 child: Text(
                   snap["likedBy"].length.toString() + " likes",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
@@ -111,7 +151,7 @@ class _PostState extends State<Post> {
             children: [
               SizedBox(width: 10),
               Text(
-                snap["owner"],
+                post_owner,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               ),
             ],
