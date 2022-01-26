@@ -13,7 +13,6 @@ class _LoginState extends State<MyLogin> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController email = new TextEditingController();
   TextEditingController password = new TextEditingController();
-  late String _userEmail;
 
   void _signInWithEmailAndPassword() async {
     try {
