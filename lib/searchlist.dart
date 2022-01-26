@@ -16,6 +16,7 @@ class _ListPageState extends State<ListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: null,
           title: Form(
             child: TextFormField(
               controller: searchController,
@@ -66,6 +67,6 @@ class _ListPageState extends State<ListPage> {
                   );
                 },
               )
-            : Text('Posts'));
+            : Text(''));
   }
 }

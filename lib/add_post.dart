@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'post_preview.dart';
 
@@ -15,11 +16,16 @@ class CreatePost extends StatefulWidget {
 class _CreatePostState extends State<CreatePost> {
   void _openCamera(BuildContext context) async {
     try {
-      XFile? picture =
-          await ImagePicker().pickImage(source: ImageSource.camera);
+      XFile? picture = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 75);
       if (picture != null) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => PhotoPreviewScreen(File(picture.path))));
+        File? image = await ImageCropper.cropImage(
+            sourcePath: picture.path,
+            aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1));
+        if (image != null) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PhotoPreviewScreen(File(image.path))));
+        }
       }
     } catch (src, trace) {
       Fluttertoast.showToast(
@@ -29,11 +35,16 @@ class _CreatePostState extends State<CreatePost> {
 
   void _openGallery(BuildContext context) async {
     try {
-      XFile? picture =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
+      XFile? picture = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 50);
       if (picture != null) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => PhotoPreviewScreen(File(picture.path))));
+        File? image = await ImageCropper.cropImage(
+            sourcePath: picture.path,
+            aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1));
+        if (image != null) {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PhotoPreviewScreen(File(image.path))));
+        }
       }
     } catch (src, trace) {
       Fluttertoast.showToast(
