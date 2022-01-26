@@ -1,9 +1,6 @@
-import 'dart:html';
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'login.dart';
 
 class ChangePass extends StatefulWidget {
   @override
@@ -31,7 +28,7 @@ class _ChangePassState extends State<ChangePass> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => LoginPage(),
+          builder: (context) => MyLogin(),
         ),
       );
 
