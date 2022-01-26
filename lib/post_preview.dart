@@ -91,9 +91,7 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
               msg: "Post created!!", toastLength: Toast.LENGTH_SHORT);
         } on Exception catch (e) {
           Fluttertoast.showToast(
-              msg: e.toString() ??
-                  "Image size greater than 1mb!\nUse image file less than 1mb",
-              toastLength: Toast.LENGTH_LONG);
+              msg: e.toString(), toastLength: Toast.LENGTH_LONG);
         }
       }
     }

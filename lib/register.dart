@@ -32,7 +32,7 @@ class _MyRegisterState extends State<MyRegister> {
         final usersRef = FirebaseFirestore.instance.collection('Users');
         File image = await getImageFileFromAssets("profile.png");
         String img = base64Encode(image.readAsBytesSync());
-        final ref = FirebaseStorage.instance
+        final ref = await FirebaseStorage.instance
             .ref()
             .child("profile.png")
             .getDownloadURL();
