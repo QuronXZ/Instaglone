@@ -23,10 +23,6 @@ class _MyRegisterState extends State<MyRegister> {
   void _register() async {
     try {
       //showing loading widget
-      EasyLoading.instance
-        ..indicatorType = EasyLoadingIndicatorType.ring
-        ..backgroundColor = Color.fromRGBO(255, 255, 255, 0.1)
-        ..indicatorColor = Color.fromRGBO(0, 0, 0, 1);
       EasyLoading.show(status: "Please wait");
       //creating user in firebase auth
       User? user = (await _auth.createUserWithEmailAndPassword(

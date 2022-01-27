@@ -62,10 +62,6 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
   //Method to save post
   Future<void> _savePost() async {
     //showing load widget
-    EasyLoading.instance
-      ..indicatorType = EasyLoadingIndicatorType.ring
-      ..backgroundColor = Color.fromRGBO(255, 255, 255, 0.1)
-      ..indicatorColor = Color.fromRGBO(0, 0, 0, 1);
     EasyLoading.show(status: "Posting");
     //Getting current user reference
     User? user = FirebaseAuth.instance.currentUser;

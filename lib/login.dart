@@ -18,10 +18,6 @@ class _LoginState extends State<MyLogin> {
   void _signInWithEmailAndPassword() async {
     try {
       //showing loading widget
-      EasyLoading.instance
-        ..indicatorType = EasyLoadingIndicatorType.ring
-        ..backgroundColor = Color.fromRGBO(255, 255, 255, 0.1)
-        ..indicatorColor = Color.fromRGBO(0, 0, 0, 1);
       EasyLoading.show(status: "Loggin in");
 
       //authenticating user
