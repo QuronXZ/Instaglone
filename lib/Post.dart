@@ -1,11 +1,21 @@
+<<<<<<< HEAD
 import 'dart:convert';
-//import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 
+<<<<<<< HEAD
+
+=======
+import 'dart:ffi';
+>>>>>>> a5209fa4debb543db3981e61d5d578c5f7e07714
+
+
+=======
+>>>>>>> 42d2bba2a00be3a9bcad2a352d035d9a4b9be193
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 
 class Post extends StatefulWidget {
   final snapshot;
@@ -32,7 +42,7 @@ class _PostState extends State<Post> {
   void set_owner(Map<String, dynamic>? post_data) {
     setState(() {
       post_owner = post_data?["username"];
-      //TODO: post_prof = "";
+      post_prof = post_data?["profile"];
     });
   }
 
@@ -101,7 +111,10 @@ class _PostState extends State<Post> {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: Colors.amber,
+                  child: Image.network(
+                    post_prof,
+                    errorBuilder: (context, error, stackTrace) => Text("..."),
+                  ),
                 ),
                 SizedBox(width: 10),
                 Text(
@@ -116,9 +129,19 @@ class _PostState extends State<Post> {
             height: MediaQuery.of(context).size.width,
             width: MediaQuery.of(context).size.width,
             child: Image.network(
-              snap["pic"],
+              (snap["pic"]),
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                }
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                );
+              },
               errorBuilder: (context, exception, stackTrace) {
-                return Text("Error Loading..");
+                return Center(child: Text("Loading.."));
               },
             ),
             color: Colors.black,
@@ -141,7 +164,7 @@ class _PostState extends State<Post> {
               InkWell(
                 onTap: () => {},
                 child: Text(
-                  snap["likedBy"].length.toString() + " likes",                 
+                  snap["likedBy"].length.toString() + " likes",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
               ),

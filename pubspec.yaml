@@ -45,6 +45,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   english_words: ^4.0.0
+  get: ^4.6.1
   firestore_search: ^0.1.9
 
 flutter_icons:
