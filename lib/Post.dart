@@ -141,7 +141,7 @@ class _PostState extends State<Post> {
               InkWell(
                 onTap: () => {},
                 child: Text(
-                  snap["likedBy"].length.toString() + " likes",
+                  snap["likedBy"].length.toString() + " likes",                 
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
               ),

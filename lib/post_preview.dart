@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class PhotoPreviewScreen extends StatefulWidget {
@@ -60,23 +61,33 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
 
   //Method to save post
   Future<void> _savePost() async {
+    //showing load widget
+    EasyLoading.instance
+      ..indicatorType = EasyLoadingIndicatorType.ring
+      ..backgroundColor = Color.fromRGBO(255, 255, 255, 0.1)
+      ..indicatorColor = Color.fromRGBO(0, 0, 0, 1);
+    EasyLoading.show(status: "Posting");
+    //Getting current user reference
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       //Getting the current user ID
       String owner = user.uid;
       //Getting collection reference from database
       final moviesRef = FirebaseFirestore.instance.collection('Posts');
-
+      //Creating a temporary image file
       final newpath = p.join((await getTemporaryDirectory()).path,
           '${DateTime.now()}.${p.extension(widget.imageFile.path)}');
+      //compressing image
       final result = await FlutterImageCompress.compressAndGetFile(
           widget.imageFile.path, newpath,
           quality: 75);
       if (result != null) {
+        //storing image in firebase and getting a reference
         final ref = FirebaseStorage.instance.ref().child("post").child(
             '${DateTime.now().toIso8601String() + p.basename(result.path)}');
         final res = await ref.putFile(result);
         final url = await res.ref.getDownloadURL();
+        //adding psot in firestore
         try {
           await moviesRef.add({
             'pic': url.toString(),
@@ -85,6 +96,8 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
             'createdOn': DateTime.now().toString(),
             'owner': owner
           });
+          //dismissing load widget
+          EasyLoading.dismiss();
           //On post creation
           Navigator.pop(context);
           Fluttertoast.showToast(

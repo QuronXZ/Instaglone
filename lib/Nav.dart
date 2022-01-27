@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instaglone/feed.dart';
 import 'add_post.dart';
 import 'searchlist.dart';
+import 'currentprofile.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Feed(),
     ListPage(),
     CreatePost(),
-    Text('Index 4: Profile Page'),
+    CurrentProfile(),
   ];
 
   void _onPageSelected(int index) {
@@ -86,4 +87,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+}
+
+mixin FirebaseAuth {
+  static var instance;
 }
