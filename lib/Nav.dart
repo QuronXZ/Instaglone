@@ -22,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ListPage(),
     CreatePost(),
     ProfileScreen(
-      uid: FirebaseFirestore.instance.currentUser!.uid,
+      uid: FirebaseAuth.instance.currentUser!.uid,
     ),
   ];
 
