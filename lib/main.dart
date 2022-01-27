@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
         "home": (context) => MyHomePage(),
         "login": (context) => MyLogin(),
         "register": (context) => MyRegister(),
-        "people":(context)=>listPeople()
+        "people": (context) => listPeople()
       },
       initialRoute:
           FirebaseAuth.instance.currentUser == null ? "login" : "home",
