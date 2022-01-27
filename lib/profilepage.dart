@@ -99,6 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               backgroundColor: Colors.black26,
               title: Text(
                 userData['username'],
+                
               ),
               centerTitle: false,
             ),
