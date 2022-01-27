@@ -88,7 +88,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-mixin FirebaseAuth {
-  static var instance;
-}
