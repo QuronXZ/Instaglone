@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:instaglone/feed.dart';
+import 'package:instaglone/profilepage.dart';
 import 'add_post.dart';
+import 'edit_profile.dart';
 import 'searchlist.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -19,7 +21,9 @@ class _MyHomePageState extends State<MyHomePage> {
     Feed(),
     ListPage(),
     CreatePost(),
-    Text('Index 4: Profile Page'),
+    // Text('Index 4: Profile Page')
+    EditProfile(uid: 'ZH1BWNfGWWS6qL8u4toIzB7UUhH3'),
+    
   ];
 
   void _onPageSelected(int index) {

@@ -76,7 +76,7 @@ class _LoginState extends State<MyLogin> {
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(width: 3, color: Colors.green),
                           borderRadius: BorderRadius.circular(15),
-                        )
+                        ),
                       ),
                     ),
                     SizedBox(height: 30),

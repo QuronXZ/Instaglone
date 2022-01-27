@@ -1,15 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 <<<<<<< HEAD
 
 =======
-//import 'dart:ffi';
+import 'dart:ffi';
 >>>>>>> a5209fa4debb543db3981e61d5d578c5f7e07714
-import 'dart:io';
-import 'dart:typed_data';
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 
 class Post extends StatefulWidget {
   final snapshot;
