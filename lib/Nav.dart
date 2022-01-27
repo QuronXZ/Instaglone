@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:instaglone/feed.dart';
-import 'package:instaglone/main.dart';
-import 'package:instaglone/profilepage.dart';
 import 'add_post.dart';
 import 'searchlist.dart';
+import 'currentprofile.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -21,9 +20,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Feed(),
     ListPage(),
     CreatePost(),
-    ProfileScreen(
-      uid: FirebaseAuth.instance.currentUser!.uid,
-    ),
+    CurrentProfile(),
   ];
 
   void _onPageSelected(int index) {

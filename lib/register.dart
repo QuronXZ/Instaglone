@@ -1,10 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:instaglone/Models/showSnackbar.dart';
 
 class MyRegister extends StatefulWidget {
@@ -24,13 +22,25 @@ class _MyRegisterState extends State<MyRegister> {
   //Method to register user in firebase
   void _register() async {
     try {
+      //showing loading widget
+      EasyLoading.instance
+        ..indicatorType = EasyLoadingIndicatorType.ring
+        ..backgroundColor = Color.fromRGBO(255, 255, 255, 0.1)
+        ..indicatorColor = Color.fromRGBO(0, 0, 0, 1);
+      EasyLoading.show(status: "Please wait");
+      //creating user in firebase auth
       User? user = (await _auth.createUserWithEmailAndPassword(
               email: email.text.trim(), password: password.text.trim()))
           .user;
+      //storing user in firestore after successful authentication
       if (user != null) {
         final usersRef = FirebaseFirestore.instance.collection('Users');
-        File image = await getImageFileFromAssets("profile.png");
-        String img = base64Encode(image.readAsBytesSync());
+        //getting reference of default profile pic
+        final ref = await FirebaseStorage.instance
+            .ref()
+            .child("profile.png")
+            .getDownloadURL();
+        //storing data in firestore
         usersRef
             .doc(user.uid)
             .set({
@@ -40,9 +50,10 @@ class _MyRegisterState extends State<MyRegister> {
               "following": [],
               "username": username.text.trim(),
               "bio": "",
-              "profile": img
+              "profile": ref.toString()
             })
             .then((value) => ShowSnack(context, "Sign-Up Successful!!"))
+            .then((value) => EasyLoading.dismiss())
             .then((value) => Navigator.pop(context))
             .catchError((err) => ShowSnack(
                 context, err.message ?? "There's some error in our database!"));
@@ -50,17 +61,6 @@ class _MyRegisterState extends State<MyRegister> {
     } on FirebaseAuthException catch (e) {
       ShowSnack(context, e.message ?? "There's some error in our server!");
     }
-  }
-
-  // a method to convert an image to file
-  Future<File> getImageFileFromAssets(String path) async {
-    final byteData = await rootBundle.load('assets/$path');
-
-    final file = File('${(await getTemporaryDirectory()).path}/$path');
-    await file.writeAsBytes(byteData.buffer
-        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-
-    return file;
   }
 
   @override
@@ -108,22 +108,16 @@ class _MyRegisterState extends State<MyRegister> {
                             style: TextStyle(color: Colors.white),
                             controller: username,
                             decoration: InputDecoration(
+                                labelText: 'Username',
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
-                                    color: Colors.white,
-                                  ),
+                                      width: 3, color: Colors.grey.shade800),
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                hintText: "User Name",
-                                hintStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                      width: 3, color: Colors.green),
+                                  borderRadius: BorderRadius.circular(15),
                                 )),
                           ),
                           SizedBox(
@@ -133,22 +127,16 @@ class _MyRegisterState extends State<MyRegister> {
                             style: TextStyle(color: Colors.white),
                             controller: email,
                             decoration: InputDecoration(
+                                labelText: 'Email',
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
-                                    color: Colors.white,
-                                  ),
+                                      width: 3, color: Colors.grey.shade800),
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                hintText: "Email",
-                                hintStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                      width: 3, color: Colors.green),
+                                  borderRadius: BorderRadius.circular(15),
                                 )),
                           ),
                           SizedBox(
@@ -159,22 +147,16 @@ class _MyRegisterState extends State<MyRegister> {
                             obscureText: true,
                             controller: password,
                             decoration: InputDecoration(
+                                labelText: 'Password',
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: BorderSide(
-                                    color: Colors.white,
-                                  ),
+                                      width: 3, color: Colors.grey.shade800),
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                hintText: "Password",
-                                hintStyle: TextStyle(color: Colors.white),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                      width: 3, color: Colors.green),
+                                  borderRadius: BorderRadius.circular(15),
                                 )),
                           ),
                           SizedBox(
