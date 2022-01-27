@@ -18,10 +18,6 @@ class _LoginState extends State<MyLogin> {
   void _signInWithEmailAndPassword() async {
     try {
       //showing loading widget
-      EasyLoading.instance
-        ..indicatorType = EasyLoadingIndicatorType.ring
-        ..backgroundColor = Color.fromRGBO(255, 255, 255, 0.1)
-        ..indicatorColor = Color.fromRGBO(0, 0, 0, 1);
       EasyLoading.show(status: "Loggin in");
 
       //authenticating user
@@ -81,6 +77,18 @@ class _LoginState extends State<MyLogin> {
                     TextField(
                       controller: email,
                       decoration: InputDecoration(
+<<<<<<< HEAD
+                        labelText: 'Email',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 3, color: Colors.grey.shade800),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(width: 3, color: Colors.green),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+=======
                           labelText: 'Email',
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -92,6 +100,7 @@ class _LoginState extends State<MyLogin> {
                                 const BorderSide(width: 3, color: Colors.green),
                             borderRadius: BorderRadius.circular(15),
                           )),
+>>>>>>> 42d2bba2a00be3a9bcad2a352d035d9a4b9be193
                     ),
                     SizedBox(height: 30),
                     TextField(
