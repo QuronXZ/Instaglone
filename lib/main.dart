@@ -37,6 +37,7 @@ class _MyAppState extends State<MyApp> {
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.ring
       ..textColor = Color.fromRGBO(0, 0, 0, 1.0)
+      ..indicatorColor = Color.fromRGBO(0, 0, 0, 1.0)
       ..backgroundColor = Color.fromRGBO(255, 255, 255, 0.7)
       ..loadingStyle = EasyLoadingStyle.custom;
     signout();
