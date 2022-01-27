@@ -4,6 +4,7 @@ import 'package:instaglone/profilepage.dart';
 import 'add_post.dart';
 import 'edit_profile.dart';
 import 'searchlist.dart';
+import 'currentprofile.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -21,9 +22,13 @@ class _MyHomePageState extends State<MyHomePage> {
     Feed(),
     ListPage(),
     CreatePost(),
+<<<<<<< HEAD
     // Text('Index 4: Profile Page')
     EditProfile(uid: 'ZH1BWNfGWWS6qL8u4toIzB7UUhH3'),
     
+=======
+    CurrentProfile(),
+>>>>>>> 42d2bba2a00be3a9bcad2a352d035d9a4b9be193
   ];
 
   void _onPageSelected(int index) {
