@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:instaglone/peopleList.dart';
 import "Material_color_generator.dart";
 import 'package:firebase_core/firebase_core.dart';
@@ -31,10 +32,16 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late StreamSubscription<User?> user;
 
-  // void initState() {
-  //   super.initState();
-  //   signout();
-  // }
+  void initState() {
+    super.initState();
+    EasyLoading.instance
+      ..indicatorType = EasyLoadingIndicatorType.ring
+      ..textColor = Color.fromRGBO(0, 0, 0, 1.0)
+      ..indicatorColor = Color.fromRGBO(0, 0, 0, 1.0)
+      ..backgroundColor = Color.fromRGBO(255, 255, 255, 0.7)
+      ..loadingStyle = EasyLoadingStyle.custom;
+    // signout();
+  }
 
   Future<void> signout() async {
     await FirebaseAuth.instance.signOut();
@@ -43,6 +50,9 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Instaglone',

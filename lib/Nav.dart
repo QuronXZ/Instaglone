@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:instaglone/feed.dart';
+import 'package:instaglone/profilepage.dart';
 import 'add_post.dart';
+import 'edit_profile.dart';
 import 'searchlist.dart';
 import 'currentprofile.dart';
 
