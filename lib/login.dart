@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:instaglone/Models/showSnackbar.dart';
 
 class MyLogin extends StatefulWidget {
@@ -37,6 +38,9 @@ class _LoginState extends State<MyLogin> {
     } on FirebaseAuthException catch (e) {
       EasyLoading.dismiss();
       ShowSnack(context, e.message ?? "Invalid email of Password!");
+    } on Exception catch (e) {
+      Fluttertoast.showToast(
+          msg: "Already Clicked", toastLength: Toast.LENGTH_SHORT);
     }
   }
 

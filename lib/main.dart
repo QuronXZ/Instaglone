@@ -31,10 +31,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late StreamSubscription<User?> user;
 
-  void initState() {
-    super.initState();
-    signout();
-  }
+  // void initState() {
+  //   super.initState();
+  //   signout();
+  // }
 
   Future<void> signout() async {
     await FirebaseAuth.instance.signOut();
