@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instaglone/feed.dart';
+import 'package:instaglone/peopleList.dart';
 import 'add_post.dart';
 import 'searchlist.dart';
 
@@ -19,7 +20,8 @@ class _MyHomePageState extends State<MyHomePage> {
     Feed(),
     ListPage(),
     CreatePost(),
-    Text('Index 4: Profile Page'),
+    listPeople(),
+    // Text('Index 4: Profile Page'),
   ];
 
   void _onPageSelected(int index) {

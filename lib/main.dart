@@ -5,6 +5,7 @@ import "Material_color_generator.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'firebase_options.dart';
 import 'Nav.dart';
 import 'login.dart';
@@ -30,10 +31,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late StreamSubscription<User?> user;
 
-  // void initState() {
-  //   super.initState();
-  //   signout();
-  // }
+  void initState() {
+    super.initState();
+    signout();
+  }
 
   Future<void> signout() async {
     await FirebaseAuth.instance.signOut();
@@ -45,16 +46,22 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Instaglone',
-      theme: ThemeData(primarySwatch: generateMaterialColor(Colors.white)),
+      theme: ThemeData(
+          primarySwatch: generateMaterialColor(Colors.black),
+          appBarTheme: AppBarTheme(
+              backgroundColor: Colors.white, foregroundColor: Colors.black),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+              backgroundColor: Colors.white, foregroundColor: Colors.black)),
       routes: {
         "home": (context) => MyHomePage(),
         "login": (context) => MyLogin(),
         "register": (context) => MyRegister(),
-        "people":(context)=>listPeople()
+        // "people":(context)=>listPeople()
       },
       initialRoute:
           FirebaseAuth.instance.currentUser == null ? "login" : "home",
       home: MyHomePage(),
+      builder: EasyLoading.init(),
     );
   }
 }
