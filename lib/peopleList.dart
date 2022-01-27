@@ -12,23 +12,28 @@ class listPeople extends StatefulWidget {
 
 class _listPeopleState extends State<listPeople> {
   final List<u.User> usrList = [];
-  List<String> getdata() {
-    List<String> folList = [];
-    FirebaseFirestore.instance
-        .collection("Users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      // first add the data to the Offset object
-      List.castFrom(value["followers"]).forEach((element) {
-        folList.add(element.toString());
-      });
+  User? user = FirebaseAuth.instance.currentUser;
+  List<String> DocList = [];
+
+  void getdata() {
+    String id = user!.uid;
+    FirebaseFirestore.instance.collection("Users").doc(id).get().then((value) {
+      Map<String, dynamic>? info = value.data();
+      if (info != null) {
+        // first add the data to the Offset object
+        setState(() {
+          List.castFrom(info["followers"]).forEach((element) {
+            // print(element);
+            DocList.add(element.toString());
+          });
+        });
+      }
     });
-    return folList;
   }
 
   void peopleAdd(Map<String, dynamic>? data) {
     u.User usr = new u.User(username: data!['username'], name: data['name']);
+    print(usr.username);
     setState(() {
       usrList.add(usr);
     });
@@ -36,14 +41,15 @@ class _listPeopleState extends State<listPeople> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> DocList = getdata();
+    getdata();
     DocList.forEach((element) {
       FirebaseFirestore.instance
           .collection("Users")
           .doc(element)
           .get()
-          .then((value) =>  peopleAdd(value.data()));
+          .then((value) => peopleAdd(value.data()));
     });
+    print(usrList);
     return Scaffold(
         appBar: AppBar(
           title: Text("Followers"),

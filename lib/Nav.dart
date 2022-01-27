@@ -20,7 +20,8 @@ class _MyHomePageState extends State<MyHomePage> {
     Feed(),
     ListPage(),
     CreatePost(),
-    listPeople()
+    listPeople(),
+    // Text('Index 4: Profile Page'),
   ];
 
   void _onPageSelected(int index) {
