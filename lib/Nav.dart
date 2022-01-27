@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:instaglone/feed.dart';
-import 'package:instaglone/peopleList.dart';
+import 'package:instaglone/profilepage.dart';
 import 'add_post.dart';
+import 'edit_profile.dart';
 import 'searchlist.dart';
+import 'currentprofile.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -20,8 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Feed(),
     ListPage(),
     CreatePost(),
-    listPeople(),
-    // Text('Index 4: Profile Page'),
+    CurrentProfile(),
   ];
 
   void _onPageSelected(int index) {

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:instaglone/Models/showSnackbar.dart';
 
 class MyRegister extends StatefulWidget {
@@ -23,10 +24,6 @@ class _MyRegisterState extends State<MyRegister> {
   void _register() async {
     try {
       //showing loading widget
-      EasyLoading.instance
-        ..indicatorType = EasyLoadingIndicatorType.ring
-        ..backgroundColor = Color.fromRGBO(255, 255, 255, 0.1)
-        ..indicatorColor = Color.fromRGBO(0, 0, 0, 1);
       EasyLoading.show(status: "Please wait");
       //creating user in firebase auth
       User? user = (await _auth.createUserWithEmailAndPassword(
@@ -60,6 +57,9 @@ class _MyRegisterState extends State<MyRegister> {
       }
     } on FirebaseAuthException catch (e) {
       ShowSnack(context, e.message ?? "There's some error in our server!");
+    } on Exception catch (e) {
+      Fluttertoast.showToast(
+          msg: "Already Clicked", toastLength: Toast.LENGTH_SHORT);
     }
   }
 
