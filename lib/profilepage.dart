@@ -22,7 +22,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    getData();
   }
 
   Future<void> followUser(String uid, String followId) async {
@@ -64,12 +63,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .collection('Users')
           .doc(widget.uid)
           .get();
+      print("Got User");
 
       //get post LENGTH
       var postSnap = await FirebaseFirestore.instance
           .collection('Posts')
-          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .get();
+      print("Got Posts");
       postLen = postSnap.docs.length;
       userData = userSnap.data()!;
       followers = userSnap.data()!['followers'].length;
@@ -77,19 +78,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isFollowing = userSnap
           .data()!['followers']
           .contains(FirebaseAuth.instance.currentUser!.uid);
-      setState(() {});
+      // setState(() {});
     } catch (e) {
       //ShowSnack(context, e.toString(),);
       print(e.toString());
     }
 
     setState(() {
-      isLoading = true;
+      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // getData();
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -112,8 +114,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           CircleAvatar(
                             backgroundColor: Colors.grey,
-                            backgroundImage: NetworkImage(
-                              userData['photoUrl'],
+                            child: Image.network(
+                              userData['profile'],
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Text("...."),
                             ),
                             radius: 40,
                           ),
