@@ -114,7 +114,8 @@ class _PostState extends State<Post> {
                   CircleAvatar(
                     child: Image.network(
                       post_prof,
-                      errorBuilder: (context, error, stackTrace) => Text("..."),
+                      errorBuilder: (context, error, stackTrace) =>
+                          CircularProgressIndicator(),
                     ),
                   ),
                   SizedBox(width: 10),
