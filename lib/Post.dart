@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 
 class Post extends StatefulWidget {
   final snapshot;
-  const Post({Key? key, required this.snapshot}) : super(key: key);
+  final following;
+  const Post({Key? key, required this.snapshot, required this.following})
+      : super(key: key);
 
   @override
-  _PostState createState() => _PostState(snapshot);
+  _PostState createState() => _PostState(snapshot, following);
 }
 
 class _PostState extends State<Post> {
   final snap;
-  _PostState(this.snap);
+  final following;
+  _PostState(this.snap, this.following);
 
 // Variables
   Icon fav_icon = Icon(
@@ -83,110 +86,116 @@ class _PostState extends State<Post> {
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      current_user = user.uid;
-      isLiked = snap["likedBy"].contains(current_user);
-    }
-    if (mounted == true) {
-      get_owner();
-    }
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            child: Row(
+    following.add(current_user);
+    if (following.contains(snap["owner"])) {
+      print(snap["owner"]);
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        current_user = user.uid;
+        isLiked = snap["likedBy"].contains(current_user);
+      }
+      if (mounted == true) {
+        get_owner();
+      }
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    child: Image.network(
+                      post_prof,
+                      errorBuilder: (context, error, stackTrace) => Text("..."),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    post_owner,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width,
+              child: Image.network(
+                (snap["pic"]),
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  );
+                },
+                errorBuilder: (context, exception, stackTrace) {
+                  return Center(child: Text("Loading.."));
+                },
+              ),
+              color: Colors.black,
+            ),
+            Row(
               children: [
-                CircleAvatar(
-                  child: Image.network(
-                    post_prof,
-                    errorBuilder: (context, error, stackTrace) => Text("..."),
+                IconButton(
+                  onPressed: () => on_like(),
+                  icon: isLiked
+                      ? Icon(
+                          Icons.favorite,
+                          size: 32,
+                          color: Colors.red,
+                        )
+                      : Icon(
+                          Icons.favorite_border,
+                          size: 32,
+                        ),
+                ),
+                InkWell(
+                  onTap: () => {},
+                  child: Text(
+                    snap["likedBy"].length.toString() + " likes",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 SizedBox(width: 10),
                 Text(
                   post_owner,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                )
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          Container(
-            height: MediaQuery.of(context).size.width,
-            width: MediaQuery.of(context).size.width,
-            child: Image.network(
-              (snap["pic"]),
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                }
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                );
-              },
-              errorBuilder: (context, exception, stackTrace) {
-                return Center(child: Text("Loading.."));
-              },
-            ),
-            color: Colors.black,
-          ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () => on_like(),
-                icon: isLiked
-                    ? Icon(
-                        Icons.favorite,
-                        size: 32,
-                        color: Colors.red,
-                      )
-                    : Icon(
-                        Icons.favorite_border,
-                        size: 32,
-                      ),
-              ),
-              InkWell(
-                onTap: () => {},
-                child: Text(
-                  snap["likedBy"].length.toString() + " likes",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              SizedBox(width: 10),
-              Text(
-                post_owner,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-              ),
-            ],
-          ),
-          SizedBox(height: 5),
-          Row(
-            children: [
-              SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  snap["caption"],
-                  style: TextStyle(fontSize: 14),
-                  maxLines: 15,
-                  overflow: TextOverflow.ellipsis,
-                  textDirection: TextDirection.ltr,
-                  textAlign: TextAlign.justify,
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    snap["caption"],
+                    style: TextStyle(fontSize: 14),
+                    maxLines: 15,
+                    overflow: TextOverflow.ellipsis,
+                    textDirection: TextDirection.ltr,
+                    textAlign: TextAlign.justify,
+                  ),
                 ),
-              ),
-              SizedBox(width: 10),
-            ],
-          ),
-        ],
-      ),
-    );
+                SizedBox(width: 10),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }
