@@ -25,10 +25,12 @@ class _PostState extends State<Post> {
   String post_prof = "";
 
   void set_owner(Map<String, dynamic>? post_data) {
-    setState(() {
-      post_owner = post_data?["username"];
-      post_prof = post_data?["profile"];
-    });
+    if (mounted == true) {
+      setState(() {
+        post_owner = post_data?["username"];
+        post_prof = post_data?["profile"];
+      });
+    }
   }
 
   void get_owner() {
@@ -86,7 +88,9 @@ class _PostState extends State<Post> {
       current_user = user.uid;
       isLiked = snap["likedBy"].contains(current_user);
     }
-    get_owner();
+    if (mounted == true) {
+      get_owner();
+    }
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
       child: Column(
