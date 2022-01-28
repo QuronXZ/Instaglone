@@ -61,13 +61,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     try {
       var userSnap = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('Users')
           .doc(widget.uid)
           .get();
 
       //get post LENGTH
       var postSnap = await FirebaseFirestore.instance
-          .collection('posts')
+          .collection('Posts')
           .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .get();
       postLen = postSnap.docs.length;
@@ -99,7 +99,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               backgroundColor: Colors.black26,
               title: Text(
                 userData['username'],
-                
               ),
               centerTitle: false,
             ),
@@ -216,7 +215,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const Divider(),
                 FutureBuilder(
                   future: FirebaseFirestore.instance
-                      .collection('posts')
+                      .collection('Posts')
                       .where('uid', isEqualTo: widget.uid)
                       .get(),
                   builder: (context, snapshot) {
@@ -241,7 +240,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                           return Container(
                             child: Image(
-                              image: NetworkImage(snap['postUrl']),
+                              image: NetworkImage(snap['pic']),
                               fit: BoxFit.cover,
                             ),
                           );
