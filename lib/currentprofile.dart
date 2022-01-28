@@ -10,10 +10,14 @@ class CurrentProfile extends StatefulWidget {
 }
 
 class _CurrentProfileState extends State<CurrentProfile> {
-  String profileUID = FirebaseAuth.instance.currentUser!.uid;
+  String profileUID = "";
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      profileUID = user.uid;
+    }
     return ProfileScreen(uid: profileUID);
   }
 }

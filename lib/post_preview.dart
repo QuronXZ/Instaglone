@@ -8,11 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Material_color_generator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:firebase_storage/firebase_storage.dart';        
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
 
 class PhotoPreviewScreen extends StatefulWidget {
@@ -65,10 +62,6 @@ class _PhotoPreviewScreenState extends State<PhotoPreviewScreen> {
   //Method to save post
   Future<void> _savePost() async {
     //showing load widget
-    EasyLoading.instance
-      ..indicatorType = EasyLoadingIndicatorType.ring
-      ..backgroundColor = Color.fromRGBO(255, 255, 255, 0.1)
-      ..indicatorColor = Color.fromRGBO(0, 0, 0, 1);
     EasyLoading.show(status: "Posting");
     //Getting current user reference
     User? user = FirebaseAuth.instance.currentUser;

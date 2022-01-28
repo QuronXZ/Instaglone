@@ -22,9 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Feed(),
     ListPage(),
     CreatePost(),
-    // EditProfile(uid: 'ZH1BWNfGWWS6qL8u4toIzB7UUhH3'),
     CurrentProfile(),
-    // ProfileScreen(),
   ];
 
   void _onPageSelected(int index) {
