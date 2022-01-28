@@ -36,4 +36,14 @@ class User {
           following: dataMap['following']);
     }).toList();
   }
+
+  String getUidFromUsername(String uname) {
+    String uid = '';
+    QuerySnapshot querySnap = FirebaseFirestore.instance
+        .collection('User')
+        .where('username', isEqualTo: uname)
+        .snapshots() as QuerySnapshot;
+    QueryDocumentSnapshot doc = querySnap.docs[0];
+    return uid;
+  }
 }
