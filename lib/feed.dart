@@ -51,7 +51,6 @@ class _FeedState extends State<Feed> {
 
   @override
   Widget build(BuildContext context) {
-    print(following);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

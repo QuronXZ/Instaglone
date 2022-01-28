@@ -27,6 +27,16 @@ class _PostState extends State<Post> {
   String post_owner = "";
   String post_prof = "";
 
+  @override
+  void initState() {
+    super.initState();
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      current_user = user.uid;
+    }
+    get_owner();
+  }
+
   void set_owner(Map<String, dynamic>? post_data) {
     if (mounted == true) {
       setState(() {
@@ -88,14 +98,10 @@ class _PostState extends State<Post> {
   Widget build(BuildContext context) {
     following.add(current_user);
     if (following.contains(snap["owner"])) {
-      print(snap["owner"]);
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         current_user = user.uid;
         isLiked = snap["likedBy"].contains(current_user);
-      }
-      if (mounted == true) {
-        get_owner();
       }
       return Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
