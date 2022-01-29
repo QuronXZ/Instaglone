@@ -17,11 +17,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int followers = 0;
   int following = 0;
   bool isFollowing = false;
-  bool isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    getData();
   }
 
   Future<void> followUser(String uid, String followId) async {
@@ -36,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           'followers': FieldValue.arrayRemove([uid])
         });
 
-        await _firestore.collection('Users').doc(followId).update({
+        await _firestore.collection('Users').doc(uid).update({
           'followers': FieldValue.arrayRemove([followId])
         });
       } else {
@@ -44,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           'followers': FieldValue.arrayUnion([uid])
         });
 
-        await _firestore.collection('Users').doc(followId).update({
+        await _firestore.collection('Users').doc(uid).update({
           'followers': FieldValue.arrayUnion([followId])
         });
       }
@@ -78,9 +79,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isFollowing = userSnap
           .data()!['followers']
           .contains(FirebaseAuth.instance.currentUser!.uid);
-      // setState(() {});
+      setState(() {});
     } catch (e) {
-      //ShowSnack(context, e.toString(),);
+      ShowSnackBar(
+        context,
+        e.toString(),
+      );
       print(e.toString());
     }
 
@@ -282,4 +286,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
+
+  void ShowSnackBar(BuildContext context, String string) {}
 }
