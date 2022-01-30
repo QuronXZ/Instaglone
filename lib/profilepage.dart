@@ -133,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   children: [
                                     buildStatColumn(postLen, "Posts"),
                                     buildStatColumn(followers, "Followers"),
-                                    buildStatColumn(following, "Following"),   
+                                    buildStatColumn(following, "Following"),
                                   ],
                                 ),
                                 Row(
@@ -221,7 +221,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 FutureBuilder(
                   future: FirebaseFirestore.instance
                       .collection('Posts')
-                      .where('UID', isEqualTo: widget.uid)
+                      .where('owner', isEqualTo: widget.uid)
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
