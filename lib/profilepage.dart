@@ -69,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       //get post LENGTH
       var postSnap = await FirebaseFirestore.instance
           .collection('Posts')
-          .where('UID', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where('owner', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .get();
       print("Got Posts");
       postLen = postSnap.docs.length;
