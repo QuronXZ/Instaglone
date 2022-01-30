@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instaglone/changePassword.dart';
 import 'package:instaglone/edit_profile.dart';
+import 'login.dart';
 import 'widgets/follow_button.dart';
 import 'widgets/choice_button.dart';
 
@@ -20,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int following = 0;
   bool isFollowing = false;
   bool isLoading = false;
-  Choice _selectedOption = choices[0];
+  //Choice _selectedOption = choices[0];
 
   @override
   void initState() {
@@ -28,11 +30,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getData();
   }
 
-  void _select(Choice choice) {
+  /*  void _select(Choice choice) {
     setState(() {
       _selectedOption = choice;
     });
-  }
+  } */
 
   Future<void> followUser(String uid, String followId) async {
     try {
@@ -61,6 +63,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Future<void> signout(String uid) async {
+    await FirebaseAuth.instance.signOut();
   }
 
   getData() async {
@@ -117,7 +123,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           centerTitle: false,
           actions: <Widget>[
-            PopupMenuButton<Choice>(
+            PopupMenuButton(
+              //onSelected: _select,
+              itemBuilder: (content) => [
+                PopupMenuItem(
+                  value: 1,
+                  child: Text("Change Password"),
+                ),
+                PopupMenuItem(
+                  value: 2,
+                  child: Text("Log Out"),
+                ),
+              ],
+
+              onSelected: (int menu) async {
+                final navigatorKey = GlobalKey<NavigatorState>();
+                // ignore: unused_label
+                navigatorKey:navigatorKey;
+                if (menu == 1) {
+                  navigatorKey.currentState?.push(
+                      MaterialPageRoute(builder: (context) => ChangePass()));
+                } else if (menu == 2) {
+                  await signout(FirebaseAuth.instance.currentUser!.uid);
+                  navigatorKey.currentState?.push(
+                      MaterialPageRoute(builder: (context) => MyLogin()));
+                }
+              },
+              /* PopupMenuButton<Choice>(
               onSelected: _select,
               itemBuilder: (BuildContext context) {
                 return choices.skip(0).map((Choice choice) {
@@ -127,6 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 }).toList();
               },
+            ), */
             ),
           ],
         ),
@@ -134,124 +167,118 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
+              child: Column(
+                /* children: [
                   ChoiceCard(choice: _selectedOption),
-                  Column(
+                  Column( */
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.grey,
-                            child: Image.network(
-                              userData['profile'],
-                            ),
-                            radius: 40,
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Column(
+                      CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        child: Image.network(
+                          userData['profile'],
+                        ),
+                        radius: 40,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    buildStatColumn(postLen, "Posts"),
-                                    buildStatColumn(followers, "Followers"),
-                                    buildStatColumn(following, "Following"),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    FirebaseAuth.instance.currentUser!.uid ==
-                                            widget.uid
-                                        ? FollowButton(
-                                            text: 'Edit Profile',
-                                            backgroundColor: Colors.black,
-                                            textColor: Colors.white,
-                                            borderColor: Colors.grey,
-                                            function: () async {
-                                              Navigator.of(context)
-                                                  .pushReplacement(
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditProfile(
-                                                    uid: FirebaseAuth.instance
-                                                        .currentUser!.uid,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                        : isFollowing
-                                            ? FollowButton(
-                                                text: 'Unfollow',
-                                                backgroundColor: Colors.white,
-                                                textColor: Colors.black,
-                                                borderColor: Colors.grey,
-                                                function: () async {
-                                                  await followUser(
-                                                    FirebaseAuth.instance
-                                                        .currentUser!.uid,
-                                                    userData['UID'],
-                                                  );
-
-                                                  setState(() {
-                                                    isFollowing = false;
-                                                    followers--;
-                                                  });
-                                                },
-                                              )
-                                            : FollowButton(
-                                                text: 'Follow',
-                                                backgroundColor: Colors.blue,
-                                                textColor: Colors.white,
-                                                borderColor: Colors.blue,
-                                                function: () async {
-                                                  await followUser(
-                                                    FirebaseAuth.instance
-                                                        .currentUser!.uid,
-                                                    userData['UID'],
-                                                  );
-
-                                                  setState(() {
-                                                    isFollowing = true;
-                                                    followers++;
-                                                  });
-                                                },
-                                              )
-                                  ],
-                                ),
+                                buildStatColumn(postLen, "Posts"),
+                                buildStatColumn(followers, "Followers"),
+                                buildStatColumn(following, "Following"),
                               ],
                             ),
-                          ),
-                        ],
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                FirebaseAuth.instance.currentUser!.uid ==
+                                        widget.uid
+                                    ? FollowButton(
+                                        text: 'Edit Profile',
+                                        backgroundColor: Colors.black,
+                                        textColor: Colors.white,
+                                        borderColor: Colors.grey,
+                                        function: () async {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (context) => EditProfile(
+                                                uid: FirebaseAuth
+                                                    .instance.currentUser!.uid,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : isFollowing
+                                        ? FollowButton(
+                                            text: 'Unfollow',
+                                            backgroundColor: Colors.white,
+                                            textColor: Colors.black,
+                                            borderColor: Colors.grey,
+                                            function: () async {
+                                              await followUser(
+                                                FirebaseAuth
+                                                    .instance.currentUser!.uid,
+                                                userData['UID'],
+                                              );
+
+                                              setState(() {
+                                                isFollowing = false;
+                                                followers--;
+                                              });
+                                            },
+                                          )
+                                        : FollowButton(
+                                            text: 'Follow',
+                                            backgroundColor: Colors.blue,
+                                            textColor: Colors.white,
+                                            borderColor: Colors.blue,
+                                            function: () async {
+                                              await followUser(
+                                                FirebaseAuth
+                                                    .instance.currentUser!.uid,
+                                                userData['UID'],
+                                              );
+
+                                              setState(() {
+                                                isFollowing = true;
+                                                followers++;
+                                              });
+                                            },
+                                          )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.only(
-                          top: 15,
-                        ),
-                        child: Text(
-                          userData['username'],
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.only(
-                          top: 1,
-                        ),
-                        child: Text(
-                          userData['bio'],
-                        ),
-                      )
                     ],
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(
+                      top: 15,
+                    ),
+                    child: Text(
+                      userData['username'],
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(
+                      top: 1,
+                    ),
+                    child: Text(
+                      userData['bio'],
+                    ),
                   ),
                 ],
               ),
