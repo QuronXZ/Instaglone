@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instaglone/edit_profile.dart';
 import 'widgets/follow_button.dart';
+import 'widgets/choice_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -18,11 +20,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int following = 0;
   bool isFollowing = false;
   bool isLoading = false;
+  Choice _selectedOption = choices[0];
 
   @override
   void initState() {
     super.initState();
     getData();
+  }
+
+  void _select(Choice choice) {
+    setState(() {
+      _selectedOption = choice;
+    });
   }
 
   Future<void> followUser(String uid, String followId) async {
@@ -95,23 +104,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     // getData();
-    return isLoading
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.black26,
-              title: Text(
-                userData['username'],
-              ),
-              centerTitle: false,
+    if (isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black26,
+          title: Text(
+            userData['username'],
+          ),
+          centerTitle: false,
+          actions: <Widget>[
+            PopupMenuButton<Choice>(
+              onSelected: _select,
+              itemBuilder: (BuildContext context) {
+                return choices.skip(0).map((Choice choice) {
+                  return PopupMenuItem<Choice>(
+                    value: choice,
+                    child: Text(choice.name),
+                  );
+                }).toList();
+              },
             ),
-            body: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
+          ],
+        ),
+        body: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  ChoiceCard(choice: _selectedOption),
+                  Column(
                     children: [
                       Row(
                         children: [
@@ -147,7 +173,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             backgroundColor: Colors.black,
                                             textColor: Colors.white,
                                             borderColor: Colors.grey,
-                                            function: () {},
+                                            function: () async {
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditProfile(
+                                                    uid: FirebaseAuth.instance
+                                                        .currentUser!.uid,
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                           )
                                         : isFollowing
                                             ? FollowButton(
@@ -216,47 +253,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       )
                     ],
                   ),
-                ),
-                const Divider(),
-                FutureBuilder(
-                  future: FirebaseFirestore.instance
-                      .collection('Posts')
-                      .where('owner', isEqualTo: widget.uid)
-                      .get(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
+                ],
+              ),
+            ),
+            const Divider(),
+            FutureBuilder(
+              future: FirebaseFirestore.instance
+                  .collection('Posts')
+                  .where('owner', isEqualTo: widget.uid)
+                  .get(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      itemCount: (snapshot.data! as dynamic).docs.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 5,
-                        mainAxisSpacing: 1.5,
-                        childAspectRatio: 1,
+                return GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: (snapshot.data! as dynamic).docs.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 1.5,
+                    childAspectRatio: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot snap =
+                        (snapshot.data! as dynamic).docs[index];
+
+                    return Container(
+                      child: Image(
+                        image: NetworkImage(snap['pic']),
+                        fit: BoxFit.cover,
                       ),
-                      itemBuilder: (context, index) {
-                        DocumentSnapshot snap =
-                            (snapshot.data! as dynamic).docs[index];
-
-                        return Container(
-                          child: Image(
-                            image: NetworkImage(snap['pic']),
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      },
                     );
                   },
-                )
-              ],
-            ),
-          );
+                );
+              },
+            )
+          ],
+        ),
+      );
+    }
   }
 
   Column buildStatColumn(int num, String label) {
