@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instaglone/peopleList.dart';
 import 'widgets/follow_button.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -131,9 +132,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    buildStatColumn(postLen, "Posts"),
-                                    buildStatColumn(followers, "Followers"),
-                                    buildStatColumn(following, "Following"),
+                                    InkWell(
+                                      //onTap: () => ,
+                                      child: buildStatColumn(postLen, "Posts"),
+                                    ),
+                                    InkWell(
+                                      onTap: () => listPeople(),
+                                      child: buildStatColumn(
+                                          followers, "Followers"),
+                                    ),
+                                    InkWell(
+                                      child: buildStatColumn(
+                                          following, "Following"),
+                                    )
                                   ],
                                 ),
                                 Row(
@@ -246,7 +257,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                         return Container(
                           child: Image(
-                            image: NetworkImage(snap['pic']),
+                            image: NetworkImage(snap['profile']),
                             fit: BoxFit.cover,
                           ),
                         );
