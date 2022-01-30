@@ -85,7 +85,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         context,
         e.toString(),
       );
-      print(e.toString());
     }
 
     setState(() {
@@ -120,8 +119,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             backgroundColor: Colors.grey,
                             child: Image.network(
                               userData['profile'],
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Text("...."),
                             ),
                             radius: 40,
                           ),
@@ -130,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Column(
                               children: [
                                 Row(
-                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
@@ -162,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   await followUser(
                                                     FirebaseAuth.instance
                                                         .currentUser!.uid,
-                                                    userData['uid'],
+                                                    userData['UID'],
                                                   );
 
                                                   setState(() {
@@ -180,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   await followUser(
                                                     FirebaseAuth.instance
                                                         .currentUser!.uid,
-                                                    userData['uid'],
+                                                    userData['UID'],
                                                   );
 
                                                   setState(() {
@@ -224,7 +221,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 FutureBuilder(
                   future: FirebaseFirestore.instance
                       .collection('Posts')
-                      .where('uid', isEqualTo: widget.uid)
+                      .where('UID', isEqualTo: widget.uid)
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -234,25 +231,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     }
 
                     return GridView.builder(
-                        shrinkWrap: true,
-                        itemCount: (snapshot.data! as dynamic).docs.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                crossAxisSpacing: 5,
-                                mainAxisSpacing: 1.5,
-                                childAspectRatio: 1),
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot snap =
-                              (snapshot.data! as dynamic).docs[index];
+                      shrinkWrap: true,
+                      itemCount: (snapshot.data! as dynamic).docs.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 1.5,
+                        childAspectRatio: 1,
+                      ),
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot snap =
+                            (snapshot.data! as dynamic).docs[index];
 
-                          return Container(
-                            child: Image(
-                              image: NetworkImage(snap['pic']),
-                              fit: BoxFit.cover,
-                            ),
-                          );
-                        });
+                        return Container(
+                          child: Image(
+                            image: NetworkImage(snap['pic']),
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
+                    );
                   },
                 )
               ],
