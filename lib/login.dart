@@ -61,6 +61,7 @@ class _LoginState extends State<MyLogin> {
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
+            Container(),
             Container(
               padding: EdgeInsets.only(left: 35, top: 130),
               child: Text(
@@ -72,99 +73,80 @@ class _LoginState extends State<MyLogin> {
               ),
             ),
             SingleChildScrollView(
-              child: Form(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                key: _formKey,
-                child: Container(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.5,
-                      right: 35,
-                      left: 35),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'sign in',
-                            style: TextStyle(
-                                color: Color(0xff4c505b),
-                                fontSize: 27,
-                                fontWeight: FontWeight.w700),
+              child: Container(
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.5,
+                    right: 35,
+                    left: 35),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'sign in',
+                          style: TextStyle(
+                              color: Color(0xff4c505b),
+                              fontSize: 27,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 30),
+                    TextField(
+                      controller: email,
+                      decoration: buildInputDecoration(Icons.mail, "Email"),
+                    ),
+                    SizedBox(height: 30),
+                    TextField(
+                      obscureText: true,
+                      controller: password,
+                      decoration: buildInputDecoration(Icons.lock, "Password"),
+                    ),
+                    SizedBox(height: 40),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Color(0xff4c505b),
+                          child: IconButton(
+                            color: Colors.white,
+                            onPressed: _signInWithEmailAndPassword,
+                            icon: Icon(Icons.arrow_forward),
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 30),
-                      TextFormField(
-                        controller: email,
-                        decoration: buildInputDecoration(Icons.mail, "Email"),
-                        validator: (value) {
-                          if (value == null ||
-                              !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                  .hasMatch(value)) {
-                            return 'Please enter valide Email';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 30),
-                      TextFormField(
-                        obscureText: true,
-                        controller: password,
-                        decoration:
-                            buildInputDecoration(Icons.lock, "Password"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter Password';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 40),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Color(0xff4c505b),
-                            child: IconButton(
-                              color: Colors.white,
-                              onPressed: _signInWithEmailAndPassword,
-                              icon: Icon(Icons.arrow_forward),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 40),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, 'register');
-                              },
-                              child: Text(
-                                'Sign up',
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 18,
-                                  color: Color(0xff4c505b),
-                                ),
-                              )),
-                          // TextButton(
-                          //     onPressed: () {},
-                          //     child: Text(
-                          //       'Forget Password',
-                          //       style: TextStyle(
-                          //         decoration: TextDecoration.underline,
-                          //         fontSize: 18,
-                          //         color: Color(0xff4c505b),
-                          //       ),
-                          //     )),
-                        ],
-                      )
-                    ],
-                  ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 40),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, 'register');
+                            },
+                            child: Text(
+                              'Sign up',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontSize: 18,
+                                color: Color(0xff4c505b),
+                              ),
+                            )),
+                        TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'Forget Password',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontSize: 18,
+                                color: Color(0xff4c505b),
+                              ),
+                            )),
+                      ],
+                    )
+                  ],
                 ),
               ),
             )

@@ -14,10 +14,11 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   final TextEditingController searchController = TextEditingController();
   bool isShowUsers = false;
+  
   void callPeople(User usr) {
-    Navigator.push<void>(
+    Navigator.push(
         context,
-        MaterialPageRoute<void>(
+        MaterialPageRoute(
             builder: (BuildContext context) => ProfileScreen(
                 uid: User().getUidFromUsername(usr.username.toString()))));
   }
@@ -50,7 +51,7 @@ class _ListPageState extends State<ListPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InkWell(
-                        onLongPress: () => callPeople(data),
+                        onDoubleTap: () => callPeople(data),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
@@ -59,7 +60,7 @@ class _ListPageState extends State<ListPage> {
                           ),
                         )),
                     InkWell(
-                        onLongPress: () => callPeople(data),
+                        onDoubleTap: () => callPeople(data),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               bottom: 8.0, left: 8.0, right: 8.0),

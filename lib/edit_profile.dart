@@ -1,9 +1,14 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instaglone/profilepage.dart';
+
+import 'currentprofile.dart';
 
 
 class EditProfile extends StatefulWidget {
@@ -24,10 +29,10 @@ class _EditProfileState extends State<EditProfile> {
 
   //Updating user
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
-  Future<void> updateUser(uid, name, bio, dob, email, username){
+  Future<void> updateUser(uid, name, bio, dob, username){
     return users
        .doc(uid)
-       .update({'name':name, 'bio':bio, 'dob':dob, 'email':email, 'username':username})
+       .update({'name':name, 'bio':bio, 'dob':dob, 'username':username})
        .then((value) => print('User Updated'))
        .catchError((error) => print('Failed to update user: $error'));
        
@@ -45,7 +50,9 @@ class _EditProfileState extends State<EditProfile> {
             Icons.arrow_back,
             color: Colors.blue,
           ),
-          onPressed: () {},
+          onPressed: () {
+            gotoSecondActivity(context);
+          },
         ),
       ),
       body: Form(
@@ -67,7 +74,6 @@ class _EditProfileState extends State<EditProfile> {
               }
               var data = snapshot.data!.data();
               var name = data!['name'];
-              var email = data['email'];
               var username = data['username'];
               var bio = data['bio'];
               var dob = data['dob'];
@@ -139,7 +145,10 @@ class _EditProfileState extends State<EditProfile> {
                         onChanged: (value) => name = value,
                         decoration: InputDecoration(
                           labelText: 'Name: ',
-                          prefixIcon: Icon(Icons.account_box),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(width: 3, color: Colors.blue),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
                           labelStyle: TextStyle(fontSize: 20.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25.0)
@@ -158,41 +167,15 @@ class _EditProfileState extends State<EditProfile> {
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10.0),
                       child: TextFormField(
-                        initialValue: email,
-                        autofocus: false,
-                        onChanged: (value) => email = value,
-                        decoration: InputDecoration(
-                          labelText: 'Email: ',
-                          prefixIcon: Icon(Icons.email),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 3, color: Colors.green),
-                          ),
-                          labelStyle: TextStyle(fontSize: 20.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0)
-                          ),
-                          errorStyle:
-                              TextStyle(color: Colors.redAccent, fontSize: 15),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please Enter Email';
-                          } else if (!value.contains('@')) {
-                            return 'Please Enter Valid Email';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 10.0),
-                      child: TextFormField(
                         initialValue: username,
                         autofocus: false,
                         onChanged: (value) => username = value,
                         decoration: InputDecoration(
                           labelText: 'Username: ',
-                          prefixIcon: Icon(Icons.account_box),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(width: 3, color: Colors.blue),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
                           labelStyle: TextStyle(fontSize: 20.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25.0)
@@ -216,7 +199,10 @@ class _EditProfileState extends State<EditProfile> {
                         onChanged: (value) => dob = value,
                         decoration: InputDecoration(
                           labelText: 'Birth Date: ',
-                          prefixIcon: Icon(Icons.cake),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(width: 3, color: Colors.blue),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
                           labelStyle: TextStyle(fontSize: 20.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25.0)
@@ -240,7 +226,10 @@ class _EditProfileState extends State<EditProfile> {
                         onChanged: (value) => bio = value,
                         decoration: InputDecoration(
                           labelText: 'Bio: ',
-                          prefixIcon: Icon(Icons.info),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(width: 3, color: Colors.blue),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
                           labelStyle: TextStyle(fontSize: 20.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25.0)
@@ -265,7 +254,7 @@ class _EditProfileState extends State<EditProfile> {
                             onPressed: () {
                               // Validate returns true if the form is valid, otherwise false.
                               if (_formKey.currentState!.validate()) {
-                                updateUser(widget.uid, name, bio, dob, email, username);
+                                updateUser(widget.uid, name, bio, dob, username);
                                 // Navigator.pop(context);
                               }
                             },
@@ -282,7 +271,9 @@ class _EditProfileState extends State<EditProfile> {
                                 color: Colors.black,
                               ),
                             ),
-                            onPressed: () => {},
+                            onPressed: () => {
+                              gotoSecondActivity(context)
+                            },
                             child: Text(
                               'Cancel',
                               style: TextStyle(fontSize: 18.0),
@@ -296,6 +287,17 @@ class _EditProfileState extends State<EditProfile> {
               );
             },
           )),
+    );
+  }
+
+  Widget imageProfie() {
+    return Stack(
+      children: <Widget>[
+        CircleAvatar(
+          radius: 80.0,
+          backgroundImage: AssetImage('assets/profile.png'),
+        )
+      ],
     );
   }
 
@@ -353,6 +355,15 @@ class _EditProfileState extends State<EditProfile> {
   await db.putFile(File(image.path));
   return await db.getDownloadURL();
 }
+
+gotoSecondActivity(BuildContext context){
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CurrentProfile()),
+    );
+    
+  }
 
 //Returns img name
 // String getImageName(XFile image){
