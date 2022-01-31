@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:firestore_search/firestore_search.dart';
 import 'package:instaglone/Models/user.dart';
 import 'package:instaglone/profilepage.dart';
-import 'package:instaglone/Models/user.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({Key? key}) : super(key: key);
