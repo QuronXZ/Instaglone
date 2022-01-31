@@ -127,39 +127,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
               //onSelected: _select,
               itemBuilder: (content) => [
                 PopupMenuItem(
-                  value: 1,
-                  child: Text("Change Password"),
-                ),
+                    value: 1,
+                    child: Text("Change Password"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChangePass(),
+                        ),
+                      );
+                    }),
                 PopupMenuItem(
-                  value: 2,
-                  child: Text("Log Out"),
-                ),
+                    value: 2,
+                    child: Text("Log Out"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyLogin(),
+                        ),
+                      );
+                    }),
               ],
 
               onSelected: (int menu) async {
-                final navigatorKey = GlobalKey<NavigatorState>();
+                /* final navigatorKey = GlobalKey<NavigatorState>();
                 // ignore: unused_label
-                navigatorKey:navigatorKey;
+                navigatorKey:
+                navigatorKey; */
                 if (menu == 1) {
-                  navigatorKey.currentState?.push(
-                      MaterialPageRoute(builder: (context) => ChangePass()));
                 } else if (menu == 2) {
                   await signout(FirebaseAuth.instance.currentUser!.uid);
-                  navigatorKey.currentState?.push(
-                      MaterialPageRoute(builder: (context) => MyLogin()));
+                  /* navigatorKey.currentState?.push(
+                      MaterialPageRoute(builder: (context) => MyLogin())); */
                 }
               },
               /* PopupMenuButton<Choice>(
-              onSelected: _select,
-              itemBuilder: (BuildContext context) {
-                return choices.skip(0).map((Choice choice) {
-                  return PopupMenuItem<Choice>(
-                    value: choice,
-                    child: Text(choice.name),
-                  );
-                }).toList();
-              },
-            ), */
+                onSelected: _select,
+                itemBuilder: (BuildContext context) {
+                  return choices.skip(0).map((Choice choice) {
+                    return PopupMenuItem<Choice>(
+                      value: choice,
+                      child: Text(choice.name),
+                    );
+                  }).toList();
+                },
+              ), */
             ),
           ],
         ),
@@ -169,8 +182,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 /* children: [
-                  ChoiceCard(choice: _selectedOption),
-                  Column( */
+                    ChoiceCard(choice: _selectedOption),
+                    Column( */
                 children: [
                   Row(
                     children: [
