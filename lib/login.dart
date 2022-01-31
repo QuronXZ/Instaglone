@@ -86,13 +86,12 @@ class _LoginState extends State<MyLogin> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: const [
                           Text(
-                                'sign in',
-                                style: TextStyle(
-                                  color: Color(0xff4c505b),
-                                  fontSize: 27,
-                                  fontWeight: FontWeight.w700
-                                ),
-                                ),
+                            'sign in',
+                            style: TextStyle(
+                                color: Color(0xff4c505b),
+                                fontSize: 27,
+                                fontWeight: FontWeight.w700),
+                          ),
                         ],
                       ),
                       SizedBox(height: 30),
@@ -100,23 +99,26 @@ class _LoginState extends State<MyLogin> {
                         controller: email,
                         decoration: buildInputDecoration(Icons.mail, "Email"),
                         validator: (value) {
-                            if (value == null || !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
-                              return 'Please enter valide Email';
-                            }
-                            return null;
-                          },
+                          if (value == null ||
+                              !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                  .hasMatch(value)) {
+                            return 'Please enter valide Email';
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(height: 30),
                       TextFormField(
                         obscureText: true,
                         controller: password,
-                        decoration: buildInputDecoration(Icons.lock, "Password"),
+                        decoration:
+                            buildInputDecoration(Icons.lock, "Password"),
                         validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter Password';
-                            }
-                            return null;
-                          },
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter Password';
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(height: 40),
                       Row(
@@ -149,16 +151,16 @@ class _LoginState extends State<MyLogin> {
                                   color: Color(0xff4c505b),
                                 ),
                               )),
-                          TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Forget Password',
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 18,
-                                  color: Color(0xff4c505b),
-                                ),
-                              )),
+                          // TextButton(
+                          //     onPressed: () {},
+                          //     child: Text(
+                          //       'Forget Password',
+                          //       style: TextStyle(
+                          //         decoration: TextDecoration.underline,
+                          //         fontSize: 18,
+                          //         color: Color(0xff4c505b),
+                          //       ),
+                          //     )),
                         ],
                       )
                     ],
@@ -173,16 +175,13 @@ class _LoginState extends State<MyLogin> {
   }
 }
 
-InputDecoration buildInputDecoration(IconData icons,String hinttext) {
+InputDecoration buildInputDecoration(IconData icons, String hinttext) {
   return InputDecoration(
     hintText: hinttext,
     prefixIcon: Icon(icons),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(25.0),
-      borderSide: const BorderSide(
-          color: Colors.green,
-          width: 1.5
-      ),
+      borderSide: const BorderSide(color: Colors.green, width: 1.5),
     ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(25.0),
@@ -191,7 +190,7 @@ InputDecoration buildInputDecoration(IconData icons,String hinttext) {
         width: 1.5,
       ),
     ),
-    enabledBorder:OutlineInputBorder(
+    enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(25.0),
       borderSide: const BorderSide(
         color: Colors.blue,

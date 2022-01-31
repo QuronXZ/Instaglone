@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instaglone/peopleList.dart';
-import 'package:instaglone/changePassword.dart';
+// import 'package:instaglone/peopleList.dart';
+// import 'package:instaglone/changePassword.dart';
 import 'package:instaglone/edit_profile.dart';
-import 'login.dart';
+// import 'login.dart';
 import 'widgets/follow_button.dart';
-import 'widgets/choice_button.dart';
+// import 'widgets/choice_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -66,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> signout(String uid) async {
+  Future<void> signout() async {
     await FirebaseAuth.instance.signOut();
   }
 
@@ -134,22 +134,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 PopupMenuItem(
                   value: 2,
                   child: Text("Log Out"),
+                  onTap: () async {
+                    await signout();
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "login", (route) => false);
+                  },
                 ),
               ],
 
-              onSelected: (int menu) async {
-                final navigatorKey = GlobalKey<NavigatorState>();
-                // ignore: unused_label
-                navigatorKey:navigatorKey;
-                if (menu == 1) {
-                  navigatorKey.currentState?.push(
-                      MaterialPageRoute(builder: (context) => ChangePass()));
-                } else if (menu == 2) {
-                  await signout(FirebaseAuth.instance.currentUser!.uid);
-                  navigatorKey.currentState?.push(
-                      MaterialPageRoute(builder: (context) => MyLogin()));
-                }
-              },
+              // onSelected: (int menu) async {
+              //   final navigatorKey = GlobalKey<NavigatorState>();
+              //   // ignore: unused_label
+              //   navigatorKey:
+              //   navigatorKey;
+              //   if (menu == 1) {
+              //     navigatorKey.currentState?.push(
+              //         MaterialPageRoute(builder: (context) => ChangePass()));
+              //   } else if (menu == 2) {
+              //     await signout(FirebaseAuth.instance.currentUser!.uid);
+              //     navigatorKey.currentState?.push(
+              //         MaterialPageRoute(builder: (context) => MyLogin()));
+              //   }
+              // },
               /* PopupMenuButton<Choice>(
               onSelected: _select,
               itemBuilder: (BuildContext context) {

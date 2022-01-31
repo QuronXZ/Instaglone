@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:instaglone/profilepage.dart';
 
@@ -26,7 +24,6 @@ class ChoiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChoiceCard(
-    );
+    return ChoiceCard();
   }
 }

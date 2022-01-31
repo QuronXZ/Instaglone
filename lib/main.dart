@@ -43,10 +43,6 @@ class _MyAppState extends State<MyApp> {
     // signout();
   }
 
-  Future<void> signout() async {
-    await FirebaseAuth.instance.signOut();
-  }
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
