@@ -14,6 +14,7 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   final TextEditingController searchController = TextEditingController();
   bool isShowUsers = false;
+  
   void callPeople(User usr) {
     Navigator.push(
         context,
@@ -59,7 +60,7 @@ class _ListPageState extends State<ListPage> {
                           ),
                         )),
                     InkWell(
-                        onLongPress: () => callPeople(data),
+                        onDoubleTap: () => callPeople(data),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               bottom: 8.0, left: 8.0, right: 8.0),

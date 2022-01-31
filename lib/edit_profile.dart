@@ -29,10 +29,10 @@ class _EditProfileState extends State<EditProfile> {
 
   //Updating user
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
-  Future<void> updateUser(uid, name, bio, dob, email, username){
+  Future<void> updateUser(uid, name, bio, dob, username){
     return users
        .doc(uid)
-       .update({'name':name, 'bio':bio, 'dob':dob, 'email':email, 'username':username})
+       .update({'name':name, 'bio':bio, 'dob':dob, 'username':username})
        .then((value) => print('User Updated'))
        .catchError((error) => print('Failed to update user: $error'));
        
@@ -74,7 +74,6 @@ class _EditProfileState extends State<EditProfile> {
               }
               var data = snapshot.data!.data();
               var name = data!['name'];
-              var email = data['email'];
               var username = data['username'];
               var bio = data['bio'];
               var dob = data['dob'];
@@ -160,35 +159,6 @@ class _EditProfileState extends State<EditProfile> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please Enter Name';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 10.0),
-                      child: TextFormField(
-                        initialValue: email,
-                        autofocus: false,
-                        onChanged: (value) => email = value,
-                        decoration: InputDecoration(
-                          labelText: 'Email: ',
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 3, color: Colors.blue),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          labelStyle: TextStyle(fontSize: 20.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0)
-                          ),
-                          errorStyle:
-                              TextStyle(color: Colors.redAccent, fontSize: 15),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please Enter Email';
-                          } else if (!value.contains('@')) {
-                            return 'Please Enter Valid Email';
                           }
                           return null;
                         },
@@ -284,7 +254,7 @@ class _EditProfileState extends State<EditProfile> {
                             onPressed: () {
                               // Validate returns true if the form is valid, otherwise false.
                               if (_formKey.currentState!.validate()) {
-                                updateUser(widget.uid, name, bio, dob, email, username);
+                                updateUser(widget.uid, name, bio, dob, username);
                                 // Navigator.pop(context);
                               }
                             },
