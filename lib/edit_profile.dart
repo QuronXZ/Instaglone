@@ -1,9 +1,14 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instaglone/profilepage.dart';
+
+import 'currentprofile.dart';
 
 
 class EditProfile extends StatefulWidget {
@@ -45,7 +50,9 @@ class _EditProfileState extends State<EditProfile> {
             Icons.arrow_back,
             color: Colors.blue,
           ),
-          onPressed: () {},
+          onPressed: () {
+            gotoSecondActivity(context);
+          },
         ),
       ),
       body: Form(
@@ -294,7 +301,9 @@ class _EditProfileState extends State<EditProfile> {
                                 color: Colors.black,
                               ),
                             ),
-                            onPressed: () => {},
+                            onPressed: () => {
+                              gotoSecondActivity(context)
+                            },
                             child: Text(
                               'Cancel',
                               style: TextStyle(fontSize: 18.0),
@@ -308,6 +317,17 @@ class _EditProfileState extends State<EditProfile> {
               );
             },
           )),
+    );
+  }
+
+  Widget imageProfie() {
+    return Stack(
+      children: <Widget>[
+        CircleAvatar(
+          radius: 80.0,
+          backgroundImage: AssetImage('assets/profile.png'),
+        )
+      ],
     );
   }
 
@@ -365,6 +385,15 @@ class _EditProfileState extends State<EditProfile> {
   await db.putFile(File(image.path));
   return await db.getDownloadURL();
 }
+
+gotoSecondActivity(BuildContext context){
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CurrentProfile()),
+    );
+    
+  }
 
 //Returns img name
 // String getImageName(XFile image){

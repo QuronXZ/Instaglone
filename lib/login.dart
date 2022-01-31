@@ -61,6 +61,7 @@ class _LoginState extends State<MyLogin> {
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
+            Container(),
             Container(
               padding: EdgeInsets.only(left: 35, top: 130),
               child: Text(

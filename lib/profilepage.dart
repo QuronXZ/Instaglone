@@ -6,7 +6,8 @@ import 'package:instaglone/changePassword.dart';
 import 'package:instaglone/edit_profile.dart';
 import 'login.dart';
 import 'widgets/follow_button.dart';
-import 'widgets/choice_button.dart';
+import 'widgets/choice_btn.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -138,14 +139,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
 
               onSelected: (int menu) async {
-                final navigatorKey = GlobalKey<NavigatorState>();
+                // final navigatorKey = GlobalKey<NavigatorState>();
                 // ignore: unused_label
-                navigatorKey:navigatorKey;
+                // navigatorKey:navigatorKey;
                 if (menu == 1) {
+                  var navigatorKey;
                   navigatorKey.currentState?.push(
                       MaterialPageRoute(builder: (context) => ChangePass()));
                 } else if (menu == 2) {
                   await signout(FirebaseAuth.instance.currentUser!.uid);
+                  var navigatorKey;
                   navigatorKey.currentState?.push(
                       MaterialPageRoute(builder: (context) => MyLogin()));
                 }
