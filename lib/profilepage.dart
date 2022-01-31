@@ -132,18 +132,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     value: 1,
                     child: Text("Change Password"),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChangePass(),
-                        ),
-                      );
+                      Navigator.of(context).pushReplacementNamed('/changePass');
+                      //context,
+                      //MaterialPageRoute(
+                      //builder: (context) => ChangePass(),
+                      //),
+                      // );
                     }),
                 PopupMenuItem(
                     value: 2,
                     child: Text("Log Out"),
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => MyLogin(),
