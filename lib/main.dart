@@ -66,6 +66,7 @@ class _MyAppState extends State<MyApp> {
         "home": (context) => MyHomePage(),
         "login": (context) => MyLogin(),
         "register": (context) => MyRegister(),
+        
         // "people":(context)=>listPeople()
       },
       initialRoute:

@@ -56,7 +56,7 @@ class _ChangePassState extends State<ChangePass> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Image.asset("images/change.jpg"),
+                  child: Image.asset("assets/change-password-icon.png"),
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 10.0),
