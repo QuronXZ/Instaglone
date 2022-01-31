@@ -139,7 +139,10 @@ class _EditProfileState extends State<EditProfile> {
                         onChanged: (value) => name = value,
                         decoration: InputDecoration(
                           labelText: 'Name: ',
-                          prefixIcon: Icon(Icons.account_box),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(width: 3, color: Colors.blue),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
                           labelStyle: TextStyle(fontSize: 20.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25.0)
@@ -163,9 +166,9 @@ class _EditProfileState extends State<EditProfile> {
                         onChanged: (value) => email = value,
                         decoration: InputDecoration(
                           labelText: 'Email: ',
-                          prefixIcon: Icon(Icons.email),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 3, color: Colors.green),
+                            borderSide: const BorderSide(width: 3, color: Colors.blue),
+                            borderRadius: BorderRadius.circular(25.0),
                           ),
                           labelStyle: TextStyle(fontSize: 20.0),
                           border: OutlineInputBorder(
@@ -192,7 +195,10 @@ class _EditProfileState extends State<EditProfile> {
                         onChanged: (value) => username = value,
                         decoration: InputDecoration(
                           labelText: 'Username: ',
-                          prefixIcon: Icon(Icons.account_box),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(width: 3, color: Colors.blue),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
                           labelStyle: TextStyle(fontSize: 20.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25.0)
@@ -216,7 +222,10 @@ class _EditProfileState extends State<EditProfile> {
                         onChanged: (value) => dob = value,
                         decoration: InputDecoration(
                           labelText: 'Birth Date: ',
-                          prefixIcon: Icon(Icons.cake),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(width: 3, color: Colors.blue),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
                           labelStyle: TextStyle(fontSize: 20.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25.0)
@@ -240,7 +249,10 @@ class _EditProfileState extends State<EditProfile> {
                         onChanged: (value) => bio = value,
                         decoration: InputDecoration(
                           labelText: 'Bio: ',
-                          prefixIcon: Icon(Icons.info),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(width: 3, color: Colors.blue),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
                           labelStyle: TextStyle(fontSize: 20.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25.0)
