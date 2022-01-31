@@ -16,27 +16,41 @@ class _FeedState extends State<Feed> {
   String current_user = "";
   List<dynamic> following = [];
 
+  void set_following(Map<String, dynamic>? user_data) {
+    if (mounted == true) {
+      setState(() {
+        following = user_data?["following"];
+      });
+    }
+  }
+
+  void get_following() {
+    FirebaseFirestore.instance
+        .collection("Users")
+        .doc(current_user)
+        .get()
+        .then((value) => {set_following(value.data())});
+  }
+
   @override
   void initState() {
     super.initState();
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      current_user = user.uid;
-      FirebaseFirestore.instance
-          .collection("Users")
-          .doc(current_user)
-          .get()
-          .then((value) => value.data())
-          .then((value) => setState(() {
-                following = value?["following"];
-              }))
-          .catchError((err) => print(err));
+    if (mounted == true) {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        current_user = user.uid;
+      }
+      get_following();
+      if (following.length == 0) {
+        setState(() {
+          following = [current_user];
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(following);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -57,12 +71,25 @@ class _FeedState extends State<Feed> {
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.data?.docs == []) {
+            return Center(
+              child: Text(
+                "Your Friends haven't posted anything, Yet!",
+                style: TextStyle(fontSize: 32),
+              ),
+            );
           }
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) =>
-                Post(snapshot: snapshot.data!.docs[index].data()),
+            itemBuilder: (context, index) => Post(
+              snapshot: snapshot.data!.docs[index].data(),
+              following: following,
+            ),
           );
         },
       ),

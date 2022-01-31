@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instaglone/feed.dart';
+import 'package:instaglone/peopleList.dart';
 import 'package:instaglone/profilepage.dart';
 import 'add_post.dart';
 import 'edit_profile.dart';
@@ -22,8 +23,8 @@ class _MyHomePageState extends State<MyHomePage> {
     Feed(),
     ListPage(),
     CreatePost(),
-    // CurrentProfile(),
-    EditProfile(uid: "ZH1BWNfGWWS6qL8u4toIzB7UUhH3"),
+    CurrentProfile(),
+    // listPeople()
   ];
 
   void _onPageSelected(int index) {
