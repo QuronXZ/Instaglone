@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instaglone/peopleList.dart';
 import 'package:instaglone/changePassword.dart';
 import 'package:instaglone/edit_profile.dart';
 import 'login.dart';
