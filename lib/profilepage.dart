@@ -219,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         textColor: Colors.white,
                                         borderColor: Colors.grey,
                                         function: () async {
-                                          Navigator.of(context).pushReplacement(
+                                          Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) => EditProfile(
                                                 uid: FirebaseAuth
