@@ -19,6 +19,6 @@ class _CurrentProfileState extends State<CurrentProfile> {
     if (user != null) {
       profileUID = user.uid;
     }
-    return FollowList(uid: profileUID);
+    return ProfileScreen(uid: profileUID);
   }
 }

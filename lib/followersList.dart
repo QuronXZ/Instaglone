@@ -17,7 +17,7 @@ class _FollowListState extends State<FollowList> {
   Future<void> getList(String uid) async {
     var _firestore = FirebaseFirestore.instance;
     DocumentSnapshot snap = await _firestore.collection('Users').doc(uid).get();
-    List following = (snap.data()! as dynamic)['following'];
+    List following = (snap.data()! as dynamic)['followers'];
 
     following.forEach((element) async {
       DocumentSnapshot docsnap =
