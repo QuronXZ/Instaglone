@@ -14,12 +14,18 @@ class FollowList extends StatefulWidget {
 
 class _FollowListState extends State<FollowList> {
   final List<User> usrlist = [];
+  @override
+  void initState() {
+    super.initState();
+    getList(widget.uid);
+  }
+
   Future<void> getList(String uid) async {
     var _firestore = FirebaseFirestore.instance;
     DocumentSnapshot snap = await _firestore.collection('Users').doc(uid).get();
-    List following = (snap.data()! as dynamic)['following'];
+    List followers = (snap.data()! as dynamic)['followers'];
 
-    following.forEach((element) async {
+    followers.forEach((element) async {
       DocumentSnapshot docsnap =
           await _firestore.collection('Users').doc(element).get();
       User usr = new User(
@@ -38,7 +44,6 @@ class _FollowListState extends State<FollowList> {
 
   @override
   Widget build(BuildContext context) {
-    getList(widget.uid);
     return Scaffold(
         appBar: AppBar(
           title: Text("Followers"),
