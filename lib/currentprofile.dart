@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instaglone/followersList.dart';
 import 'profilepage.dart';
 
 class CurrentProfile extends StatefulWidget {
@@ -18,6 +19,6 @@ class _CurrentProfileState extends State<CurrentProfile> {
     if (user != null) {
       profileUID = user.uid;
     }
-    return ProfileScreen(uid: profileUID);
+    return FollowList(uid: profileUID);
   }
 }
