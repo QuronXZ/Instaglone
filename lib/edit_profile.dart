@@ -26,7 +26,11 @@ class _EditProfileState extends State<EditProfile> {
   //Updating user
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
   Future<void> updateUser(uid, name, bio, dob, username) async {
-    _imageFile = await uploadImage();
+    try {
+      _imageFile = await uploadImage();
+    } on Exception catch (e) {
+      print(e);
+    }
     return users
         .doc(uid)
         .update({
@@ -102,7 +106,7 @@ class _EditProfileState extends State<EditProfile> {
                               onTap: () {
                                 showModalBottomSheet(
                                   context: context,
-                                  builder: ((builder) => bottomSheet()),
+                                  builder: (builder) => bottomSheet(),
                                 );
                               },
                               child: Container(
