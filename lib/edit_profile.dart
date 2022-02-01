@@ -17,7 +17,7 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   String _imageFile = "";
-  late File image;
+  File? image = null;
   bool imgset = false;
   final ImagePicker _picker = ImagePicker();
 
@@ -27,7 +27,9 @@ class _EditProfileState extends State<EditProfile> {
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
   Future<void> updateUser(uid, name, bio, dob, username) async {
     try {
-      _imageFile = await uploadImage();
+      if (image != null) {
+        _imageFile = await uploadImage();
+      }
     } on Exception catch (e) {
       print(e);
     }
@@ -94,7 +96,7 @@ class _EditProfileState extends State<EditProfile> {
                             height: 130,
                             child: imgset
                                 ? CircleAvatar(
-                                    backgroundImage: FileImage(image))
+                                    backgroundImage: FileImage(image!))
                                 : CircleAvatar(
                                     backgroundImage: NetworkImage(_imageFile),
                                   ),
@@ -330,7 +332,7 @@ class _EditProfileState extends State<EditProfile> {
 
   Future<String> uploadImage() async {
     Reference db = FirebaseStorage.instance.ref("ProfileImage/");
-    await db.putFile(File(image.path));
+    await db.putFile(File(image!.path));
     return await db.getDownloadURL();
   }
 }
