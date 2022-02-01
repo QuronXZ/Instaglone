@@ -1,6 +1,9 @@
+import 'dart:js';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:instaglone/peopleList.dart';
 import 'package:instaglone/changePassword.dart';
 import 'package:instaglone/edit_profile.dart';
@@ -68,6 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> signout() async {
     await FirebaseAuth.instance.signOut();
+    
   }
 
   getData() async {
@@ -97,10 +101,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           .contains(FirebaseAuth.instance.currentUser!.uid);
       setState(() {});
     } catch (e) {
-      ShowSnackBar(
-        context,
-        e.toString(),
-      );
+      // ShowSnackBar(
+      //   context,
+      //   e.toString(),
+      // );
+      print(e.toString());
     }
 
     setState(() {
@@ -123,59 +128,87 @@ class _ProfileScreenState extends State<ProfileScreen> {
             userData['username'],
           ),
           centerTitle: false,
-          actions: <Widget>[
-            PopupMenuButton(
-              //onSelected: _select,
-              itemBuilder: (content) => [
-                PopupMenuItem(
-                    value: 1,
-                    child: Text("Change Password"),
-                    onTap: () {
-                      Navigator.push(
+          actions: [
+            PopupMenuButton(itemBuilder: (context) => [
+              PopupMenuItem(child: Row(
+                children: [
+                  FlatButton(onPressed: () {
+                    Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => ChangePass()),
                       );
-                      // );
-                    }),
-                PopupMenuItem(
-                    value: 2,
-                    child: Text("Log Out"),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MyLogin(),
-                        ),
-                      );
-                      print('clicked logout button');
-                    }),
-              ],
-
-              onSelected: (int menu) async {
-                /* final navigatorKey = GlobalKey<NavigatorState>();
-                // ignore: unused_label
-                navigatorKey:
-                navigatorKey; */
-                if (menu == 1) {
-                } else if (menu == 2) {
-                  await signout();
-                  /* navigatorKey.currentState?.push(
-                      MaterialPageRoute(builder: (context) => MyLogin())); */
-                }
-              },
-              /* PopupMenuButton<Choice>(
-                onSelected: _select,
-                itemBuilder: (BuildContext context) {
-                  return choices.skip(0).map((Choice choice) {
-                    return PopupMenuItem<Choice>(
-                      value: choice,
-                      child: Text(choice.name),
-                    );
-                  }).toList();
-                },
-              ), */
-            ),
+                  },
+                  child: Text("change pass"))
+                ],
+              )),
+              PopupMenuItem(child: Row(
+                children: [
+                  FlatButton(onPressed: () {
+                    signout();
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyLogin()));
+                  },
+                  child: Text("Log out"))
+                ],
+              ))
+            ] 
+            )
           ],
+          // actions: <Widget>[
+          //   PopupMenuButton(
+          //     //onSelected: _select,
+          //     itemBuilder: (BuildContext context) => [
+          //       PopupMenuItem(
+          //           child: Row(
+          //             children: [
+          //               Text("Change Password"),
+          //             ],
+          //           ),
+          //           // onTap : () {
+          //           //   Navigator.push(
+          //           //     context,
+          //           //     MaterialPageRoute(builder: (context) => ChangePass()),
+          //           //   );
+          //             // );
+          //           ),
+          //       PopupMenuItem(
+          //           value: 2,
+          //           child: Text("Log Out"),
+          //           onTap: () {
+          //             Navigator.pushReplacement(
+          //               context,
+          //               MaterialPageRoute(
+          //                 builder: (context) => MyLogin(),
+          //               ),
+          //             );
+          //             print('clicked logout button');
+          //           }),
+          //     ],
+
+          //     onSelected: (int menu) async {
+          //       /* final navigatorKey = GlobalKey<NavigatorState>();
+          //       // ignore: unused_label
+          //       navigatorKey:
+          //       navigatorKey; */
+          //       if (menu == 1) {
+          //       } else if (menu == 2) {
+          //         await signout();
+          //         /* navigatorKey.currentState?.push(
+          //             MaterialPageRoute(builder: (context) => MyLogin())); */
+          //       }
+          //     },
+          //     /* PopupMenuButton<Choice>(
+          //       onSelected: _select,
+          //       itemBuilder: (BuildContext context) {
+          //         return choices.skip(0).map((Choice choice) {
+          //           return PopupMenuItem<Choice>(
+          //             value: choice,
+          //             child: Text(choice.name),
+          //           );
+          //         }).toList();
+          //       },
+          //     ), */
+          //   ),
+          // ],
         ),
         body: ListView(
           children: [
