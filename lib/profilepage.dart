@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instaglone/peopleList.dart';
+// import 'package:instaglone/peopleList.dart';
 import 'package:instaglone/changePassword.dart';
 import 'package:instaglone/edit_profile.dart';
 import 'login.dart';
 import 'widgets/follow_button.dart';
-import 'widgets/choice_button.dart';
+// import 'widgets/choice_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -66,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> signout(String uid) async {
+  Future<void> signout() async {
     await FirebaseAuth.instance.signOut();
   }
 
@@ -158,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 navigatorKey; */
                 if (menu == 1) {
                 } else if (menu == 2) {
-                  await signout(FirebaseAuth.instance.currentUser!.uid);
+                  await signout();
                   /* navigatorKey.currentState?.push(
                       MaterialPageRoute(builder: (context) => MyLogin())); */
                 }
@@ -219,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         textColor: Colors.white,
                                         borderColor: Colors.grey,
                                         function: () async {
-                                          Navigator.of(context).pushReplacement(
+                                          Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) => EditProfile(
                                                 uid: FirebaseAuth
