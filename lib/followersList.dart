@@ -14,19 +14,11 @@ class FollowList extends StatefulWidget {
 
 class _FollowListState extends State<FollowList> {
   final List<User> usrlist = [];
-<<<<<<< HEAD
-   @override
-=======
   @override
->>>>>>> e298aa23cad83f79c3737ac312e50b6e4af1df33
   void initState() {
     super.initState();
     getList(widget.uid);
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> e298aa23cad83f79c3737ac312e50b6e4af1df33
   Future<void> getList(String uid) async {
     var _firestore = FirebaseFirestore.instance;
     DocumentSnapshot snap = await _firestore.collection('Users').doc(uid).get();
@@ -51,10 +43,6 @@ class _FollowListState extends State<FollowList> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    // getList(widget.uid);
-=======
->>>>>>> e298aa23cad83f79c3737ac312e50b6e4af1df33
     return Scaffold(
         appBar: AppBar(
           title: Text("Followers"),
