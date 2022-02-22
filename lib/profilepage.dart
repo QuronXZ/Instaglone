@@ -1,10 +1,13 @@
 // import 'dart:js';
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:instaglone/peopleList.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:instaglone/changePassword.dart';
 import 'package:instaglone/edit_profile.dart';
 import 'login.dart';
@@ -69,8 +72,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> signout() async {
-    await FirebaseAuth.instance.signOut();
+  FutureOr<dynamic> changePage(void data) {
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => MyLogin()));
+    EasyLoading.dismiss();
+  }
+
+  void signout() async {
+    //showing loading widget
+    EasyLoading.show(status: "Logging out.\nPlease wait");
+    FirebaseAuth.instance.signOut().then(changePage);
   }
 
   getData() async {
@@ -147,14 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       PopupMenuItem(
                           child: Row(
                         children: [
-                          FlatButton(
-                              onPressed: () {
-                                signout();
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) => MyLogin()));
-                              },
-                              child: Text("Log out"))
+                          FlatButton(onPressed: signout, child: Text("Log out"))
                         ],
                       ))
                     ])

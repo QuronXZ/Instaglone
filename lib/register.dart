@@ -20,6 +20,11 @@ class _MyRegisterState extends State<MyRegister> {
   TextEditingController password = new TextEditingController();
   TextEditingController username = new TextEditingController();
 
+  void abort(err) {
+    ShowSnack(context, err.message ?? "There's some error in our database!");
+    EasyLoading.dismiss();
+  }
+
   //Method to register user in firebase
   void _register() async {
     try {
@@ -52,10 +57,10 @@ class _MyRegisterState extends State<MyRegister> {
             .then((value) => ShowSnack(context, "Sign-Up Successful!!"))
             .then((value) => EasyLoading.dismiss())
             .then((value) => Navigator.pop(context))
-            .catchError((err) => ShowSnack(
-                context, err.message ?? "There's some error in our database!"));
+            .catchError(abort);
       }
     } on FirebaseAuthException catch (e) {
+      EasyLoading.dismiss();
       ShowSnack(context, e.message ?? "There's some error in our server!");
     } on Exception catch (e) {
       Fluttertoast.showToast(
@@ -108,20 +113,20 @@ class _MyRegisterState extends State<MyRegister> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: const [
                               Text(
-                              'sign in',
-                              style: TextStyle(
-                                color: Color(0xff4c505b),
-                                fontSize: 27,
-                                fontWeight: FontWeight.w700
-                              ),
+                                'sign in',
+                                style: TextStyle(
+                                    color: Color(0xff4c505b),
+                                    fontSize: 27,
+                                    fontWeight: FontWeight.w700),
                               ),
                             ],
                           ),
-                    SizedBox(height: 30),
+                          SizedBox(height: 30),
                           TextField(
                             style: TextStyle(color: Colors.white),
                             controller: username,
-                            decoration: buildInputDecoration(Icons.person, "Username"),
+                            decoration:
+                                buildInputDecoration(Icons.person, "Username"),
                           ),
                           SizedBox(
                             height: 30,
@@ -129,7 +134,8 @@ class _MyRegisterState extends State<MyRegister> {
                           TextField(
                             style: TextStyle(color: Colors.white),
                             controller: email,
-                            decoration: buildInputDecoration(Icons.mail, "Email"),
+                            decoration:
+                                buildInputDecoration(Icons.mail, "Email"),
                           ),
                           SizedBox(
                             height: 30,
@@ -138,7 +144,8 @@ class _MyRegisterState extends State<MyRegister> {
                             style: TextStyle(color: Colors.white),
                             obscureText: true,
                             controller: password,
-                            decoration: buildInputDecoration(Icons.lock, "Password"),
+                            decoration:
+                                buildInputDecoration(Icons.lock, "Password"),
                           ),
                           SizedBox(
                             height: 40,
@@ -151,7 +158,7 @@ class _MyRegisterState extends State<MyRegister> {
                                 backgroundColor: Color(0xff4c505b),
                                 child: IconButton(
                                     color: Colors.white,
-                                    onPressed:_register,
+                                    onPressed: _register,
                                     icon: Icon(
                                       Icons.arrow_forward,
                                     )),
@@ -194,16 +201,13 @@ class _MyRegisterState extends State<MyRegister> {
   }
 }
 
-InputDecoration buildInputDecoration(IconData icons,String hinttext) {
+InputDecoration buildInputDecoration(IconData icons, String hinttext) {
   return InputDecoration(
     hintText: hinttext,
     prefixIcon: Icon(icons),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(25.0),
-      borderSide: const BorderSide(
-          color: Colors.green,
-          width: 1.5
-      ),
+      borderSide: const BorderSide(color: Colors.green, width: 1.5),
     ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(25.0),
@@ -212,7 +216,7 @@ InputDecoration buildInputDecoration(IconData icons,String hinttext) {
         width: 1.5,
       ),
     ),
-    enabledBorder:OutlineInputBorder(
+    enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(25.0),
       borderSide: const BorderSide(
         color: Colors.blue,

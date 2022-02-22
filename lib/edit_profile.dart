@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
 import 'package:instaglone/Models/showSnackbar.dart';
 
 class EditProfile extends StatefulWidget {
@@ -26,6 +28,8 @@ class _EditProfileState extends State<EditProfile> {
   //Updating user
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
   Future<void> updateUser(uid, name, bio, dob, username) async {
+    //showing loading widget
+    EasyLoading.show(status: "Updating Profile");
     try {
       if (image != null) {
         _imageFile = await uploadImage();
@@ -33,6 +37,7 @@ class _EditProfileState extends State<EditProfile> {
     } on Exception catch (e) {
       print(e);
     }
+
     return users
         .doc(uid)
         .update({
@@ -42,7 +47,9 @@ class _EditProfileState extends State<EditProfile> {
           'dob': dob,
           'username': username
         })
-        .then((value) => print('User Updated'))
+        .then((value) => EasyLoading.dismiss())
+        .then((value) => ShowSnack(context, "Profile Updated"))
+        .then((value) => Navigator.pop(context))
         .catchError((error) => print('Failed to update user: $error'));
   }
 
@@ -237,8 +244,6 @@ class _EditProfileState extends State<EditProfile> {
                               if (_formKey.currentState!.validate()) {
                                 updateUser(
                                     widget.uid, name, bio, dob, username);
-                                ShowSnack(context, "Profile Updated");
-                                Navigator.pop(context);
                               }
                             },
                             child: Text(
@@ -331,8 +336,13 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<String> uploadImage() async {
-    Reference db = FirebaseStorage.instance.ref("ProfileImage/");
-    await db.putFile(File(image!.path));
-    return await db.getDownloadURL();
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child("ProfileImage")
+        .child('${DateTime.now().toIso8601String() + p.basename(image!.path)}');
+    final res = await ref.putFile(File(image!.path));
+    // Reference db = FirebaseStorage.instance.ref("ProfileImage/");
+    // await db.putFile(File(image!.path));
+    return await res.ref.getDownloadURL();
   }
 }
