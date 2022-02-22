@@ -137,7 +137,7 @@ class _LoginState extends State<MyLogin> {
                         TextButton(
                             onPressed: () {},
                             child: Text(
-                              'Forget Password',
+                              '',
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 fontSize: 18,
