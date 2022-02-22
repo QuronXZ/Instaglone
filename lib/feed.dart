@@ -84,6 +84,7 @@ class _FeedState extends State<Feed> {
               ),
             );
           }
+          
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) => Post(
