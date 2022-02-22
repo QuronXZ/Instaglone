@@ -9,6 +9,7 @@ class User {
   String? password;
   List? followers;
   List? following;
+  String? profile;
 
   User(
       {this.username,
@@ -18,7 +19,8 @@ class User {
       this.dob,
       this.bio,
       this.followers,
-      this.following});
+      this.following,
+      this.profile});
 
   List<User> dataListFromSnapshot(QuerySnapshot querySnapshot) {
     return querySnapshot.docs.map((snapshot) {
@@ -33,7 +35,8 @@ class User {
           dob: dataMap['dob'],
           bio: dataMap['bio'],
           followers: dataMap['followers'],
-          following: dataMap['following']);
+          following: dataMap['following'],
+          profile: dataMap['profile']);
     }).toList();
   }
 
@@ -44,6 +47,10 @@ class User {
         .where('username', isEqualTo: uname)
         .snapshots() as QuerySnapshot;
     QueryDocumentSnapshot doc = querySnap.docs[0];
+    if (doc.exists) {
+      uid = doc.id;
+    }
+    print(uid);
     return uid;
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:firestore_search/firestore_search.dart';
 import 'package:instaglone/Models/user.dart';
 import 'package:instaglone/profilepage.dart';
-import 'package:instaglone/Models/user.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({Key? key}) : super(key: key);
@@ -15,10 +14,11 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   final TextEditingController searchController = TextEditingController();
   bool isShowUsers = false;
-  void callPeople(User usr) {
-    Navigator.push<void>(
+  
+  Future callPeople(User usr) async{
+    await Navigator.push(
         context,
-        MaterialPageRoute<void>(
+        MaterialPageRoute(
             builder: (BuildContext context) => ProfileScreen(
                 uid: User().getUidFromUsername(usr.username.toString()))));
   }
@@ -41,7 +41,7 @@ class _ListPageState extends State<ListPage> {
           return ListView.builder(
               itemCount: dataList.length,
               itemBuilder: (context, index) {
-                final User data = dataList[index];
+                final User data = dataList[index];  
                 FirebaseFirestore.instance
                     .collection("Users")
                     .where('username', isEqualTo: data.username);
@@ -51,7 +51,7 @@ class _ListPageState extends State<ListPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InkWell(
-                        onLongPress: () => callPeople(data),
+                        onTap: () => callPeople(data),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
@@ -60,7 +60,7 @@ class _ListPageState extends State<ListPage> {
                           ),
                         )),
                     InkWell(
-                        onLongPress: () => callPeople(data),
+                        onTap: () => callPeople(data),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               bottom: 8.0, left: 8.0, right: 8.0),

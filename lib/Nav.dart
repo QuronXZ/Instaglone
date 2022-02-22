@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instaglone/feed.dart';
+import 'package:instaglone/followersList.dart';
 import 'package:instaglone/peopleList.dart';
 import 'package:instaglone/profilepage.dart';
 import 'add_post.dart';
@@ -13,6 +15,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   int pageNum = 0;
   Icon _homeIcon = Icon(Icons.home);
   Icon _searchIcon = Icon(Icons.search_outlined);
@@ -24,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ListPage(),
     CreatePost(),
     CurrentProfile(),
-    // listPeople()
+    //listPeople()
   ];
 
   void _onPageSelected(int index) {

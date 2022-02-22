@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:instaglone/changePassword.dart';
 import 'package:instaglone/peopleList.dart';
 import "Material_color_generator.dart";
 import 'package:firebase_core/firebase_core.dart';
@@ -43,10 +44,6 @@ class _MyAppState extends State<MyApp> {
     // signout();
   }
 
-  Future<void> signout() async {
-    await FirebaseAuth.instance.signOut();
-  }
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -66,6 +63,7 @@ class _MyAppState extends State<MyApp> {
         "home": (context) => MyHomePage(),
         "login": (context) => MyLogin(),
         "register": (context) => MyRegister(),
+        "/changePass": (context) => ChangePass(),
         // "people":(context)=>listPeople()
       },
       initialRoute:

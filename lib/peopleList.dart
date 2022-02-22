@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instaglone/Models/user.dart' as u;
 
@@ -11,7 +10,7 @@ class listPeople extends StatefulWidget {
 }
 
 class _listPeopleState extends State<listPeople> {
-  final List<u.User> usrList = [];
+  List<u.User>? usrList;
   User? user = FirebaseAuth.instance.currentUser;
   List<String> DocList = [];
 
@@ -20,7 +19,6 @@ class _listPeopleState extends State<listPeople> {
     FirebaseFirestore.instance.collection("Users").doc(id).get().then((value) {
       Map<String, dynamic>? info = value.data();
       if (info != null) {
-        // first add the data to the Offset object
         setState(() {
           List.castFrom(info["followers"]).forEach((element) {
             // print(element);
@@ -32,10 +30,18 @@ class _listPeopleState extends State<listPeople> {
   }
 
   void peopleAdd(Map<String, dynamic>? data) {
-    u.User usr = new u.User(username: data!['username'], name: data['name']);
+    u.User usr = new u.User(
+        username: data!['username'],
+        name: data['name'],
+        bio: data['bio'],
+        dob: data['dob'],
+        email: data['email'],
+        followers: data['followers'],
+        following: data['following'],
+        password: data['password']);
     print(usr.username);
     setState(() {
-      usrList.add(usr);
+      usrList?.add(usr);
     });
   }
 
@@ -52,12 +58,13 @@ class _listPeopleState extends State<listPeople> {
     print(usrList);
     return Scaffold(
         appBar: AppBar(
+          
           title: Text("Followers"),
         ),
         body: ListView.builder(
           itemCount: DocList.length,
           itemBuilder: (context, index) {
-            final u.User data = usrList[index];
+            final u.User data = usrList![index];
             return Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,

@@ -75,7 +75,7 @@ class _FeedState extends State<Feed> {
               child: CircularProgressIndicator(),
             );
           }
-
+          print(snapshot.data!.docs.length);
           if (snapshot.data?.docs == []) {
             return Center(
               child: Text(
