@@ -17,7 +17,7 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   String _imageFile = "";
-  late File image;
+  File? image = null;
   bool imgset = false;
   final ImagePicker _picker = ImagePicker();
 
@@ -26,7 +26,13 @@ class _EditProfileState extends State<EditProfile> {
   //Updating user
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
   Future<void> updateUser(uid, name, bio, dob, username) async {
-    _imageFile = await uploadImage();
+    try {
+      if (image != null) {
+        _imageFile = await uploadImage();
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
     return users
         .doc(uid)
         .update({
@@ -90,7 +96,7 @@ class _EditProfileState extends State<EditProfile> {
                             height: 130,
                             child: imgset
                                 ? CircleAvatar(
-                                    backgroundImage: FileImage(image))
+                                    backgroundImage: FileImage(image!))
                                 : CircleAvatar(
                                     backgroundImage: NetworkImage(_imageFile),
                                   ),
@@ -102,7 +108,7 @@ class _EditProfileState extends State<EditProfile> {
                               onTap: () {
                                 showModalBottomSheet(
                                   context: context,
-                                  builder: ((builder) => bottomSheet()),
+                                  builder: (builder) => bottomSheet(),
                                 );
                               },
                               child: Container(
@@ -326,7 +332,7 @@ class _EditProfileState extends State<EditProfile> {
 
   Future<String> uploadImage() async {
     Reference db = FirebaseStorage.instance.ref("ProfileImage/");
-    await db.putFile(File(image.path));
+    await db.putFile(File(image!.path));
     return await db.getDownloadURL();
   }
 }

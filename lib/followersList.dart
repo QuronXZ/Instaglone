@@ -19,7 +19,6 @@ class _FollowListState extends State<FollowList> {
     super.initState();
     getList(widget.uid);
   }
-
   Future<void> getList(String uid) async {
     var _firestore = FirebaseFirestore.instance;
     DocumentSnapshot snap = await _firestore.collection('Users').doc(uid).get();

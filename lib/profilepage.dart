@@ -1,3 +1,5 @@
+// import 'dart:js';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +71,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> signout() async {
     await FirebaseAuth.instance.signOut();
-    
   }
 
   getData() async {
@@ -127,29 +128,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           centerTitle: false,
           actions: [
-            PopupMenuButton(itemBuilder: (context) => [
-              PopupMenuItem(child: Row(
-                children: [
-                  FlatButton(onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ChangePass()),
-                      );
-                  },
-                  child: Text("change pass"))
-                ],
-              )),
-              PopupMenuItem(child: Row(
-                children: [
-                  FlatButton(onPressed: () {
-                    signout();
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyLogin()));
-                  },
-                  child: Text("Log out"))
-                ],
-              ))
-            ] 
-            )
+            PopupMenuButton(
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                          child: Row(
+                        children: [
+                          FlatButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChangePass()),
+                                );
+                              },
+                              child: Text("change pass"))
+                        ],
+                      )),
+                      PopupMenuItem(
+                          child: Row(
+                        children: [
+                          FlatButton(
+                              onPressed: () {
+                                signout();
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => MyLogin()));
+                              },
+                              child: Text("Log out"))
+                        ],
+                      ))
+                    ])
           ],
           // actions: <Widget>[
           //   PopupMenuButton(
