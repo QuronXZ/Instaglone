@@ -23,8 +23,8 @@ class _MyHomePageState extends State<MyHomePage> {
     Feed(),
     ListPage(),
     CreatePost(),
-    //CurrentProfile(),
-    listPeople()
+    CurrentProfile(),
+    // listPeople()
   ];
 
   void _onPageSelected(int index) {
